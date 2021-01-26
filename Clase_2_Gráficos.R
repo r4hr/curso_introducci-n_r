@@ -1,14 +1,27 @@
+# Paquetes ---------------------------------------------
+
+# Instalar paquetes
+install.packages("tidyverse")
+install.packages("openxlsx")
+install.packages("readr")
+install.packages("ggplot2")
+
+# Cargar paquetes
 library(tidyverse)
 library(openxlsx)
 library(readr)
+library(ggplot2)
+
 
 getwd() # Cuál es el directorio de trabajo
 
+
+# Carga de datos ----------------------------------------
 # Cargo los dataframes de Nómina
 
 
-nomina <- read.xlsx("Datasets/Nomina.xlsx")
-puestos <- read.xlsx("Datasets/Nomina.xlsx", sheet = "Puestos")
+nomina <- read.xlsx("Nomina.xlsx")
+puestos <- read.xlsx("Nomina.xlsx", sheet = "Puestos")
 
 hr_data2 <- read_delim("Datasets/HRDataset_v13.csv", delim = ";")
 
@@ -111,8 +124,6 @@ mensuales <- mensuales %>%
                                                  "Entre 41 y 50", "Más de 50")))
 
 
-
-
 # Histogramas
 ggplot(mensuales, aes(SUELDO)) +
   geom_histogram()
@@ -134,7 +145,10 @@ ggplot(mensuales, aes(SUELDO)) +
 
 # Boxplot
 ggplot(mensuales, aes(SUELDO)) +
-  geom_boxplot(outlier.colour = "red")
+  geom_boxplot()
+
+
+summary(mensuales$SUELDO)
 
 # Barras con geom_col
 mensuales %>%
@@ -150,7 +164,14 @@ ggplot(mensuales, aes(x = PUESTO))+
   theme(axis.text.x = element_text(angle = 90)) # Rota el texto del eje x en 90°
 
 
-ggplot(mensuales, aes(x = AREA, fill=Rangos_Edad))+
+ggplot(mensuales, aes(x = AREA, fill = factor(EDAD)))+
+  geom_bar()+
+  theme(axis.text.x = element_text(angle = 90)) +
+  ggtitle("Empleados por rango de edad por área")
+
+
+
+ggplot(mensuales, aes(x = AREA, fill = Rangos_Edad))+
   geom_bar() +
   theme(axis.text.x = element_text(angle = 90))+
   ggtitle("Empleados por rango de edad por área")
@@ -170,16 +191,26 @@ mensuales %>%
   geom_bar(position = "dodge")+
   ggtitle("Rangos de edad en Laminado y Templado")
 
+ggplot(mensuales, aes(x = AREA, fill = Rangos_Edad))+
+  geom_bar(position = "dodge")+
+  ggtitle("Rangos de edad")
 
 # Gráfico de barras con geom_col
 mensuales %>%
   group_by(PUESTO) %>%
   summarise(Sueldo_Promedio = mean(SUELDO)) %>%
-  ggplot(aes(x = reorder(PUESTO, -Sueldo_Promedio), y = Sueldo_Promedio))+
+  ggplot(aes(x = PUESTO, y = Sueldo_Promedio)) +
   geom_col() +
-  ggtitle("Sueldos promedios por puestos")+
-  theme(axis.text.x = element_text(angle = 90))
+  ggtitle("Sueldos promedios por puestos") 
 
+mens <- mensuales %>%
+  group_by(PUESTO) %>%
+  summarise(Sueldo_Promedio = mean(SUELDO))
+
+
+ggplot(mens, aes(y = PUESTO, x = Sueldo_Promedio)) +
+  geom_col() +
+  ggtitle("Sueldos promedios por puestos") 
 
 # Gráfico ordenado
 mensuales %>%
@@ -193,9 +224,12 @@ mensuales %>%
 
 library(lubridate) # Paquete para trabajar con fechas
 library(stringr)
+library(readr)
 
 # Cargo un nuevo dataframe
 hr_data <- read_delim("Datasets/HRDataset_v13.csv", delim = ";")
+
+glimpse(hr_data)
 
 hr_terminate <- hr_data %>%
   select(Sex, DateofTermination) %>%
@@ -208,9 +242,13 @@ hr_terminate <- hr_data %>%
   group_by(Year_Termination, Sex) %>%
   summarise(Terminations = sum(Count))
 
+glimpse(hr_terminate)
+
+hr_terminate
+
 
 # Gráfico de líneas
-ggplot(hr_terminate, aes(x = Year_Termination, y = Terminations, color = Sex))+
+ggplot(hr_terminate, aes(x = Year_Termination, y = Terminations))+
     geom_line(size = 1)
 
 # Gráfico de líneas configurado
@@ -221,6 +259,9 @@ ggplot(hr_terminate, aes(x = Year_Termination, y = Terminations, color = Sex))+
   labs(title = "Bajas por año y género",
        x = "", y = "") # Elimina las etiquetas de los ejes
 
+install.packages("gargle")
+install.packages("googlesheets4")
+
 library(gargle) # Mejora la conversión de archivos de Google al español
 library(googlesheets4) # Carga planillas de cálculo de Google
 
@@ -228,12 +269,9 @@ library(googlesheets4) # Carga planillas de cálculo de Google
 gs4_deauth() # No hace falta registrarse en google para acceder al archivo
 options(scipen = 999) # Cambia la notación científica de los gráficos
 
-encuesta_sysarmy <- sheets_read("1_db6zEAMvr-1GQjJb4hV-rSQfJ9w6GmezbqKJ2JJn7I", skip = 9)
+encuesta <- sheets_read("1f3MCA81NnjI48C03GxxGu69i2hKZLrpxf4tHzKkXL_k")
 
 glimpse(encuesta_sysarmy)
-
-
-
 
 
 # Filtramos algunas variables para trabajar
@@ -280,11 +318,10 @@ ggplot(analisis_puestos, aes(x = Experiencia, y = Sueldo, color=Puesto))+
 
 # Un scatterplot básico con una variable numérica y otra nominal
 ggplot(analisis_puestos, aes(x = Puesto, y = Sueldo)) +
-  geom_point()+
-  theme_pander()
+  geom_point(position="jitter", alpha = 0.2)
 
-ggplot(analisis_puestos, aes(x = Puesto, y = Sueldo)) +
-  geom_point(alpha = 0.4, size=3, position = "jitter", shape = 2)
+ggplot(analisis_puestos, aes(x = Puesto, y = Sueldo, shape = Sexo)) +
+  geom_point(alpha = 0.4, size=3, position = "jitter")
 
 
 library(ggthemes) # Cambia el estilo de los gráficos ampliando los temas
@@ -299,7 +336,75 @@ ggplot(analisis_puestos, aes(x = Puesto, y = Sueldo, color = Sexo)) +
        x = "", y = "")+
   scale_y_continuous(labels = comma_format(big.mark = ".", decimal.mark = ","))
 
+# Encuesta de sueldos --------------------------------
 
-ggplot(analisis_puestos, aes(x=Puesto, y = Sueldo, color=Sexo)) +
-  geom_point(position = "jitter", alpha=0.4, size=2)+
-  scale_color_colorblind()
+
+options(scipen = 999) # Elimina la notación científica de los gráficos
+
+# Cargar encuesta de sueldos de RH
+encuesta_rh <- read_delim("https://raw.githubusercontent.com/r4hr/r4hr_introduccion_dplyr/main/Datos/encuesta_sueldos.csv", delim = ",")
+
+# Exploremos el dataset
+glimpse(encuesta_rh)
+
+summary(encuesta_rh)
+
+# Como tenemos una persona que cargó que tiene 121 años de experiencia,
+# vamos a filtrar la cantidad de años a menos de 30 años.
+
+encuesta_rh <- encuesta_rh %>% 
+  filter(anios_rh <= 30)
+
+# Exploremos la variable sueldo_bruto
+
+ggplot(encuesta_rh, aes(x = sueldo_bruto)) +
+  geom_histogram()
+
+ggplot(encuesta_rh, aes(x = sueldo_bruto)) +
+  geom_boxplot()
+
+# Dado que hay valores extremos (outliers) que ensucian el análisis. 
+# También podemos ver que que hay respuestas de sueldos de AR$ 2 lo cual es absurdo.
+# Filtraremos los sueldos que estén entre AR$ 20.000 y a AR$ 500.000
+
+encuesta_rh <- encuesta_rh %>% 
+  filter(between(sueldo_bruto, 20000, 500000))
+
+
+# Gráfico de dispersión
+options(scipen = 999) # Elimina la notación científica de los gráficos
+
+ggplot(encuesta_rh, aes(x = anios_rh, y = sueldo_bruto)) +
+  geom_point()
+
+  
+dispersion_2 <- encuesta_rh %>% 
+  select(sueldo_bruto, universidad, genero) 
+
+
+ggplot(dispersion_2, aes(x = universidad, y = sueldo_bruto)) + 
+  geom_point() 
+
+ggplot(dispersion_2, aes(x = universidad, y = sueldo_bruto)) +
+  geom_point(position = "jitter", alpha = 0.3, size = 2) 
+
+ggplot(encuesta_rh, aes(x = anios_rh, y = sueldo_bruto)) +
+  geom_point(position = "jitter", alpha = 0.3, size = 2) 
+
+
+# Gráfico completo
+
+install.packages("ggthemes")
+install.packages("scales")
+
+library(ggthemes)
+
+ggplot(encuesta_rh, aes(x = universidad, y = sueldo_bruto, color = genero)) +
+  geom_point(position = "jitter", alpha = 0.3, size = 2) +
+  scale_color_colorblind() + # Del paquete ggthemes
+  labs(title = "Sueldos brutos por tipo de universidad",
+       subtitle = "Argentina 2020",
+       caption = "Fuente: Encuesta KIWI de Sueldos de RH",
+       x = "", y = "",
+       color = "Género")+
+  scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ","))
