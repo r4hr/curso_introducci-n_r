@@ -1,39 +1,55 @@
-#### Ejercicios ####
+# Ejercicios -----------
 
 library(tidyverse)
-library(openxlsx)
 
-nomina <- read.xlsx("Datasets/Nomina.xlsx")
-puestos <- read.xlsx("Datasets/Nomina.xlsx", sheet = "Puestos")
+options(scipen = 999) # Elimina la notación científica de los gráficos
 
-# Uno las tablas y creo el dataframe de los mensuales
-mensuales <- nomina %>% 
-  left_join(puestos, by = "ID") %>% 
-  filter(!is.na(PUESTO))
+# Cargar encuesta de sueldos de RH
+encuesta_rh <- read_delim("https://raw.githubusercontent.com/r4hr/r4hr_introduccion_dplyr/main/Datos/encuesta_sueldos.csv", delim = ",")
 
-# Armando el gráfico con barras de error
-mens<- mensuales %>% 
-  select(PUESTO, SUELDO) %>% 
-  group_by(PUESTO) %>% 
-  summarise(sueldo_promedio = list(mean_se(SUELDO))) %>% # Arroja el promedio y los valores mínimos y máximos del desvío estándar
-  unnest(sueldo_promedio) # Deshace la lista y lo transforma en una tabla.
+# Creo un dataframe para calcular los sueldos por puesto y su desvío estándar.
+sueldos_puesto <- encuesta_rh %>% 
+  select(puesto, sueldo_bruto) %>% 
+  group_by(puesto) %>% 
+  summarise(salarios = list(mean_se(sueldo_bruto))) %>% # Crea una lista con el sueldo promedio y los valores máximos y mínimos del desvío estándar
+  unnest(salarios) # Deshace la lista para mostrar los resultados como tabla.
 
-mens
+
+sueldos_puesto
 
 # Gráfico del resultado
-mens %>% 
-  ggplot(aes(x=PUESTO, y=y)) +
+sueldos_puesto %>% 
+  ggplot(aes(x=puesto, y=y)) +
   geom_col()+
   geom_errorbar(aes(ymin = ymin, ymax = ymax), position = "dodge")+
   coord_flip() # Rota el gráfico para facilitar la lectura de las etiquetas
 
 
+# Incorporemos el análisis de género
+# Creo un dataframe para calcular los sueldos por puesto y su desvío estándar.
+sueldos_puesto2 <- encuesta_rh %>% 
+  select(puesto, genero, sueldo_bruto) %>% 
+  group_by(puesto, genero) %>% 
+  summarise(salarios = list(mean_se(sueldo_bruto))) %>% # Crea una lista con el sueldo promedio y los valores máximos y mínimos del desvío estándar
+  unnest(salarios) # Deshace la lista para mostrar los resultados como tabla.
+
+
+sueldos_puesto2
+
+# Gráfico del resultado
+sueldos_puesto2 %>% 
+  ggplot(aes(x=puesto, y=y, fill = genero)) +
+  geom_col(position = "dodge")+
+  geom_errorbar(aes(ymin = ymin, ymax = ymax), position = "dodge")+
+  coord_flip() # Rota el gráfico para facilitar la lectura de las etiquetas
+
+
+
 # Ejercicio 2
 library(ggplot2)
 library(tidyverse)
-library(readr)
 
-hr_data <- read_delim("Datasets/HRDataset_v13.csv", delim = ";")
+hr_data <- read_delim("HRDataset_v13.csv", delim = ";")
 
 # Calculo el desempeño promedio, agrupado por fuente de reclutamiento
 perf_by_source <- hr_data %>% 
@@ -44,22 +60,15 @@ perf_by_source <- hr_data %>%
 
 perf_by_source
 
+# Hago el gráfico
 ggplot(perf_by_source, aes(x=performance_promedio, 
                            y = reorder(RecruitmentSource, performance_promedio))) +
-  geom_col()
+  geom_point() 
 
-
-ggplot(perf_by_source, aes(x=performance_promedio, 
-                           y = reorder(RecruitmentSource, performance_promedio))) +
-  geom_point(size = 2) +
-  labs(title="Desempeño promedio por \n fuente de reclutamiento", # Divide el titulo en dos renglones
-       y="",
-       x="Desempeño Promedio")
-
-
+# Otra versión del gráfico
 
 #install.packages("hrbrthemes")
-library(hrbrthemes) # Modifica el estilo de los gráficos
+library(hrbrthemes) # Agrega nuevos estilos a los gráficos
 
 ggplot(perf_by_source, aes(x=performance_promedio, 
                            y = reorder(RecruitmentSource, performance_promedio))) +
@@ -68,7 +77,7 @@ ggplot(perf_by_source, aes(x=performance_promedio,
        y="",
        x="Desempeño Promedio")+
   theme_ft_rc()+
-  theme(plot.title = element_text(hjust = 2))
+  theme(plot.title = element_text(hjust = 2)) # Desplaza el título horizontalmente
 # Barra invertida (\) Alt + 92 
 
 
@@ -81,12 +90,22 @@ ej3 <- hr_data %>%
   mutate(EmpSatisfaction = factor(EmpSatisfaction, # Para considerarlos como valores nominales
                                   levels = c(1,2,3,4,5))) 
 
+# Gráfico original
+ggplot(ej3,aes(x = Department, fill = EmpSatisfaction))+
+  geom_bar(position = "fill") +
+  coord_flip() +
+  labs(title = "Nivel de Satisfacción por Departamento",
+       x="", y="")
+
+
+# Cambiando la paleta de colores
 ggplot(ej3,aes(x = Department, fill = EmpSatisfaction))+
   geom_bar(position = "fill") +
   coord_flip() +
   scale_fill_brewer() + # Cambia la paleta de Colores
   labs(title = "Nivel de Satisfacción por Departamento",
        x="", y="")
+
 
 
 # Ejercicio 4
@@ -127,6 +146,7 @@ rotacion <- altas %>%
 
 rotacion
 
+
 # Creo un dataset "largo"
 rotacion <- rotacion %>% 
   pivot_longer(cols= c("Hires", "Terminations"), # Variables a combinar 
@@ -135,6 +155,8 @@ rotacion <- rotacion %>%
 
 head(rotacion,8) # Ver las primeras 8 filas
 
+write_delim(x = rotacion, file = "rotacion.csv", delim = ";")
+
 # Gráfico
 ggplot(rotacion, aes(x = Year, y = Cantidades, color = Movimientos)) +
   geom_line(size = 1)+
@@ -142,31 +164,14 @@ ggplot(rotacion, aes(x = Year, y = Cantidades, color = Movimientos)) +
 
 
 #Ejercicio 5
-library(gargle) # Mejora la conversión de archivos de Google al español
-library(googlesheets4) # Carga planillas de cálculo de Google
 
-gs4_deauth() # No hace falta registrarse en google para acceder al archivo
-options(scipen = 999) # Cambia la notación científica de los gráficos
+#Filtro datos espurios de la encuesta.
+encuesta_rh <- encuesta_rh %>% 
+  filter(between(sueldo_bruto, 20000, 500000))
 
-# Cargo los datos
-encuesta_sysarmy <- sheets_read("1_db6zEAMvr-1GQjJb4hV-rSQfJ9w6GmezbqKJ2JJn7I", skip = 9)
-
-# Variables de interés
-seleccion <- c("Trabajo de","Salario mensual BRUTO (en tu moneda local)")
-
-
-sysarmy <- encuesta_sysarmy %>%
-  select(seleccion)
-
-# Puesto que me interesa analizar: BI / Data Scientist
-bi <- sysarmy %>%
-  rename(Sueldo = "Salario mensual BRUTO (en tu moneda local)",
-         Puesto = "Trabajo de") %>%
-  filter(between(Sueldo,20000,250000), # Limito los sueldos que me interesa analizar
-         Puesto == "BI Analyst / Data Analyst") 
 
 # Creo un objeto para ahorrar código
-grafico <- ggplot(bi, aes(x=Sueldo))
+grafico <- ggplot(encuesta_rh, aes(x=sueldo_bruto))
 
 # Histograma
 grafico + geom_histogram()
@@ -215,6 +220,7 @@ set.seed(234)
 modelo_hr <- createDataPartition(y = datos_rh$left, p = 0.7,
                                     list = FALSE)
 
+head(modelo_hr,25)
 
 #Armo el dataframe de training [fila, columna]
 modelo_hr_train <- datos_rh[modelo_hr,]
@@ -256,6 +262,7 @@ pred_test <- predict(modelo_glm2, newdata = modelo_hr_test, type = "response")
 
 # Veo los primeros 20 resultados
 pred_test[1:20]
+
 
 # Analizo la distribución de las predicciones
 hist(pred_test)
@@ -336,5 +343,4 @@ conf_matrix_c1 <- table(modelo_hr_c1$prediccion, modelo_hr_c1$left)
 
 # Veamos todas las métricas de la matriz con esta función del paquete caret
 confusionMatrix(conf_matrix_c1)
-
-
+  
