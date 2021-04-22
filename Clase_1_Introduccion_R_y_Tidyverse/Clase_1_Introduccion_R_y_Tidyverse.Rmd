@@ -1,0 +1,478 @@
+---
+title: "Clase 1 - Introducción a R y Tidyverse"
+output: 
+  learnr::tutorial:
+  theme: spacelab
+runtime: shiny_prerendered
+description: "Tutorial de la Clase 1 del Curso Introducción a R para RRHH"
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Curso Introducción a R para RRHH
+
+## Clase 1: Introducción a R y Tidyverse
+
+Este es un tutorial sobre la primera clase del curso **Introducción a R para RRHH** de [Data 4HR](https://data-4hr.com/capacitacion/curso-introduccion-r-para-rrhh/). El objetivo de este tutorial y sus preguntas es ayudar a comprender y fijar algunos conceptos de la clase 1.
+
+Este tutorial no sería posible sin la comunidad latinoamericana de R, por eso este primer módulo lo pueden compartir y utilizar citando a Data 4HR, y sin fines comerciales.
+
+![](https://i.creativecommons.org/l/by-nc/4.0/88x31.png)
+
+De la misma manera, este tutorial no existiría sin el aporte de [Yanina Bellini Saibene](https://twitter.com/yabellini) y de [Paola Corrales](https://twitter.com/PaobCorrales) y su tutorial *"Generando tutoriales interactivos con el paquete learnr LatinR"* en la conferencia de [LatinR](https://latin-r.com/) del 2020. Pueden ver [el video en Youtube](https://youtu.be/n6IaftU1yjM), la [presentación](https://docs.google.com/presentation/d/1QLRUbERgEk85s8qK6mzmMJn7avQ_bEmTn_NzFYgqwkc/edit?usp=sharing), y también el [repositorio](https://github.com/yabellini/curso_learnr) del taller que hicieron estas dos genias.
+
+![](https://media.giphy.com/media/l2R0eYcNq9rJUsVAA/giphy.gif){width="400"}
+
+Si quieren aprender más sobre este tema, y otros relacionados con la enseñanza a distancia en general, les recomiendo que sigan el trabajo de [MetaDocencia](https://www.metadocencia.org/).
+
+Para contactarme, podés escribirme a [sergio\@d4hr.com](mailto:sergio@d4hr.com), visitar la web de [Data 4HR](https://data-4hr.com) o buscarme en redes sociales:
+
+👨‍💼 [LinkedIn](https://www.linkedin.com/in/sergiogarciamora/)
+
+⚔️ [Twitter](https://twitter.com/sergiogarciamor)
+
+📱 [Telegram](http://t.me/SergioGarciaMora)
+
+Muchas gracias!
+
+**Sergio Garcia Mora**
+
+**Data 4HR**
+
+# Conceptos de R
+
+## Objetos
+
+R es un lenguaje orientado a objetos. Esto quiere decir que las tablas, valores y resultados, les podemos dar un nombre, y utilizar ese nombre para que sea más fácil operar y programar los scripts.
+
+> Recomendación: Poné nombres claros y descriptivos a los objetos, que sean breves, pero a su vez que den una pista sobre lo que contiene. Recordá que acá lo más importante no es que R entienda lo que estás haciendo, sino que lo pueda entender otra persona, e incluso vos mismo cuando vuelvas a leer tu propio script dentro de 6 meses o un año.
+
+Algo interesante con los objetos es que podemos utilizarlos y operar con ellos en los scripts.
+
+Para crear un objeto podemos usar el símbolo `<-` (la *"flechita"*), o bien el signo igual `=` .
+
+### Ejercicio
+
+Asigna al objeto `anio_nacimiento` tu año de nacimiento. Luego usa el objeto para calcular tu edad, y guardarlo en un objeto llamado `edad` .
+
+```{r objeto, exercise = TRUE, exercise.lines = 8}
+anio.nacimiento <- ____
+anio.actual <- 2021
+
+edad <- anio._____ - anio.________
+
+edad
+
+```
+
+```{r objeto-hint-1}
+# Poné el año en el que naciste en anio.nacimiento
+# Para calcular el objeto edad tenés que restar al año actual, tu año de nacimiento
+```
+
+```{r objeto-hint-2}
+anio.nacimiento <- 1979
+anio.actual <- 2021
+
+edad = anio.actual - anio.nacimiento
+
+edad
+```
+
+## Vector
+
+Un vector es un conjunto de datos. Se suele decir que *tienen una sola dimensión* (cuando veamos *data frames* esta última frase va a tener sentido). Se pueden almacenar datos numéricos, o categóricos, en incluso una combinación de ambos.
+
+Para crear un vector y guardarlo en un objeto, necesitamos la función `c()` que significa *"combine".*
+
+Si creas vectores que contengan variables de tipo texto, cada elemento del vector tiene que tener sí o sí las comillas en cada elemento.
+
+### Ejercicio
+
+Crea un objeto con los nombres artísticos (sin los apellidos) de los integrantes de [Soda Stereo](https://es.wikipedia.org/wiki/Soda_Stereo).
+
+```{r soda-nombres, exercise = TRUE, exercise.lines = 5}
+nombres <- c("____", "____", )
+
+nombres
+```
+
+```{r soda-nombres-hint-1}
+# Cada elemento de un vector tiene que estar separado por comas.
+# Si es una variable categórica, tiene que tener comillas.
+```
+
+```{r soda-nombres-hint-2}
+nombres <- c("Gustavo", "Charly", "Zeta")
+
+nombres
+```
+
+Perfecto! **Gustavo Cerati** tocaba la guitarra y era el cantante, **Charly Alberti** era el baterista, y **Zeta Bosio** tocaba el bajo.
+
+Te dejo un link a una de [mis canciones favoritas](https://youtu.be/9sQBgDLCdmw) de Soda Stereo 🎸
+
+### Modificar elementos de un vector
+
+Para modificar elementos de un vector hay que poner el número del elemento entre corchetes y asignarle el valor que querramos modificar. Para eso tenemos que poner el nombre del elemento, y entre corchetes poner el número de la posición del elemento que queremos modificar `nombre_vector[x]` donde x es el número del vector
+
+Cambia el nombre del artista que no pertenece a Soda Stereo.
+
+```{r soda-nombres2, exercise = TRUE, exercise.lines = 7}
+nombres <- c("Gustavo", "Moro", "Zeta")
+
+nombres[__] <- "___"
+
+nombres
+```
+
+```{r soda-nombres2-hint}
+# Oscar Moro fue un baterista argentino tremendo, pero no tocaba en Soda Stereo.
+# Para reemplazar Moro por Charly tenés que poner dentro del corchete el número del elemento que querés modificar.
+# Dentro de las comillas poné Charly.
+```
+
+```{r soda-nombres2-solution}
+nombres <- c("Gustavo", "Moro", "Zeta")
+
+nombres[2] <- "Charly"
+
+nombres
+```
+
+## Dataframes
+
+Los dataframes son objetos que contienen **filas** y **columnas**, como si fuera una hoja de cálculo por ejemplo. Se dice que este tipo de objetos suele tener 2 dimensiones, una que corresponde a las filas, y otra que corresponde a las columnas.
+
+Cuando cargamos en R un archivo de Excel o nos conectamos a una tabla de una base de datos por ejemplo, vamos a ver en la pestaña *Enviroment* de RStudio el nombre del dataframe dentro de la categoría *"Data".* También podremos ver la cantidad de *observaciones* (filas) que tiene ese dataframe, y la cantidad de *variables* (columnas).
+
+![](images/environment-data.png)
+
+Cuando nos conectamos a un archivo que contenga filas y columnas, ya se carga el objeto en la memoria de R como un dataframe. También podemos crear dataframes en base a vectores que contengan la misma cantidad de elementos.
+
+### Crear un dataframe en base a vectores
+
+Completá los vectores para luego crear un dataframe con la función `data.frame()` .
+
+```{r df-soda, exercise = TRUE, exercise.lines = 12}
+# Vectores con datos de los integrantes de Soda Stereo.
+nombres <- c("_____", "Charly", "Zeta")
+instrumentos <- c("Guitarra", "Batería", "____")
+nacimiento <- c(1959, 1963, 1958)
+
+# Creamos el dataframe usando los nombres de los vectores
+soda.stereo <- data.frame(nombres, ______, _______)
+
+soda.stereo
+
+```
+
+```{r df-soda-hint}
+# Completá los datos que faltan en los espacíos vacíos de los vectores.
+# Poné los nombres de los vectores adentro de la función data.frame
+# Cuidado con mayúsculas y minúsculas, R es case sensitive
+```
+
+```{r df-soda-solution}
+# Vectores con datos de los integrantes de Soda Stereo.
+nombres <- c("Gustavo", "Charly", "Zeta")
+instrumentos <- c("Guitarra", "Batería", "Bajo")
+nacimiento <- c(1959, 1963, 1958)
+
+# Creamos el dataframe usando los nombres de los vectores
+soda.stereo <- data.frame(nombres, instrumentos, nacimiento)
+
+soda.stereo
+```
+
+### Modificar elementos de un dataframe
+
+Para modificar un elemento puntual de un dataframe tenemos que *jugar a la Batalla Naval.* La lógica para seleccionar elementos de un dataframe es la siguiente: `nombre_dataframe[fila, columna]`. Por ejemplo acá estamos seleccionando de la siguiente tabla el elemento de la fila 3, y de la columna 1 (el nombre del bajista de Soda Stereo).
+
+```{r ejemplo}
+# Vectores con datos de los integrantes de Soda Stereo.
+nombres <- c("Gustavo", "Charly", "Zeta")
+instrumentos <- c("Guitarra", "Batería", "Bajo")
+nacimiento <- c(1959, 1963, 1958)
+
+# Creamos el dataframe usando los nombres de los vectores
+soda.stereo <- data.frame(nombres, instrumentos, nacimiento)
+
+soda.stereo
+
+# Seleccionar el elemento de la fila 3, y la columna 2
+soda.stereo[3, 1]
+
+```
+
+En el siguiente ejercicio hay un error en la base de datos, y cargaron mal el instrumento que toca el bajista Zeta Bosio. Corre el código para ver dónde está el error, y luego modifica el elemento del dataframe para que contenga la información correcta.
+
+Recordá que para modificar un elemento puntual de un dataframe la lógica es `nombre_dataframe[fila, columna].`
+
+```{r ej2, echo = FALSE}
+soda.stereo <- data.frame(
+  nombres = c("Gustavo", "Charly", "Zeta"),
+  instrumentos = c("Guitarra", "Batería", "Violín"),
+  nacimiento = c(1959, 1963, 1958)
+)
+
+```
+
+```{r df-soda2, exercise = TRUE, exercise.lines = 10}
+# Corre el código
+soda.stereo
+
+# Modifica el elemento incorrecto: nombre_dataframe[fila, columna]
+
+
+# Pon el nombre del dataframe para ver si los datos son correctos ahora.
+
+```
+
+```{r df-soda2-hint-1}
+# Para modificar un elemento de un dataframe tienes que poner dentro de los corchetes primero el número de la fila, y luego el número de la columna.
+# Luego, asigna el valor correcto en la columna de instrumentos.
+# Para terminar el ejercicio poné el nombre del dataframe y analizar si los datos se modificaron correctamente
+```
+
+```{r df-soda2-hint-2}
+# Para asignar un nuevo valor de un dataframe tienes que poner:
+# nombre_dataframe[fila, columna] que quieras modificar
+# Asignar con "la flechita" (<-) o el signo igual el instrumento correcto ("Bajo")
+```
+
+```{r df-soda2-solution}
+# Modifica el elemento incorrecto: nombre_dataframe[fila, columna]
+soda.stereo[3,2] <- "Bajo"
+
+# Pon el nombre del dataframe para ver si los datos son correctos ahora.
+soda.stereo
+```
+
+## Paquetes
+
+Los *paquetes* son conjuntos de funciones que desarrolla la comunidad de R y que amplían las capacidades y funcionalidades de R base. Nos permiten hacer más cosas y de manera más simple.
+
+Los paquetes *se instalan por única vez* usando la función `install.packages("nombre_del_paquete")`. Dentro de la función, se tiene que poner el nombre del paquete, respetando mayúsculas y minúsculas, y **las comillas** son fundamentales.
+
+Una vez que el paquete está instalado, tenemos que *"activarlo"* para poder usar sus funciones. Esto lo hacemos con la función `library(nombre_del_paquete)`. Si el paquete está instalado y estás usando RStudio, a medida que vayas escribiendo el nombre del paquete te va a aparecer el nombre para autocompletar.
+
+Te das cuenta que el paquete está activo porque:
+
+-   Al empezar a escribir las funciones, aparece para autocompletar el nombre de la función, a qué paquete pertenece, y un cuadro de ayuda.
+
+    ![](images/paquete_activo.png){width="550"}
+
+-   En la pestaña **Packages** te va a aparecer con una tilde en el nombre del paquete. ![](images/paquete_activo2-01.png)
+
+### Preguntas
+
+En este primer ejercicio tendrás que corregir el código para activar el paquete `tidyverse`. ¿Cuál es la función que tenés que usar para lograrlo?
+
+```{r activar-paquete, exercise = TRUE, exercise.lines = 4}
+_______(tidyverse)
+```
+
+```{r activar-paquete-hint}
+# Para instalar o activar un paquete revisa que el nombre no tenga errores de tipeo.
+# R es case sensitive, controla que las mayúsculas o minúsculas estén bien.
+# Recuerda que no son necesarias las comillas.
+library(tidyverse)
+```
+
+```{r paquetes}
+quiz(
+  question("¿Cuántas veces hay que instalar un paquete?",
+           answer("Una sola vez", correct = TRUE),
+           answer("Cada vez que corremos un script", message = "La instalación sólo es necesaria una sola vez"),
+           answer("Cada vez que creamos un proyecto nuevo", message = "No importa la cantidad de proyectos. Cada vez que instalamos un paquete queda disponible para todos los proyectos que creemos."),
+           answer("Depende", message = "[Depende](https://youtu.be/dgf5QlcyTFY) es una bonita canción de Jarabe de Palo y en este caso es una respuesta incorrecta ;p"),
+           submit_button = "Enviar respuesta",
+           try_again_button = "Intenta de nuevo",
+           allow_retry = TRUE),
+  question("Cada vez que abro un script es necesario correr la función `library`",
+           answer("Verdadero", correct = TRUE, message = "Si, es correcto, cada vez que abrimos R tenemos que correr el script desde el principio y vover a activar los paquetes."),
+           answer("Falso", message = "Cada vez que abrimos el script hay que correr todo el código desde el principio y activar el paquete con la función library"),
+           submit_button = "Enviar respuesta",
+           try_again_button = "Intenta de nuevo",
+           allow_retry = TRUE),
+  question("¿Por qué aparece este mensaje de error?: 'no se pudo encontrar la función _________'",
+  answer("Porque el paquete no está instalado", message = "Es posible, pero hay otra respuesta más específica"),
+  answer("Porque no corrió la función library()", correct = TRUE, message = "Perfecto! La función library() activa las funciones"),
+  answer("Porque está mal escrito el nombre del paquete", message = "Si hay un error de tipeo el mensaje diría: there is no package called ___"),
+           submit_button = "Enviar respuesta",
+           try_again_button = "Intenta de nuevo",
+           allow_retry = TRUE
+))
+```
+
+# Tidyverse
+
+![](images/tidyverse_packages.png){width="438"}
+
+Tidyverse es un conjunto de paquetes, diseñados principalmente para la manipulación y transformación de datos. En este primer curso trabajamos mucho con el paquete `dplyr` que nos permite filtrar datos, unir datos de diversas fuentes, y hacer las transformaciones necesarias para poder realizar nuestros análisis. Para saber más del resto de los paquetes buscá en el [Google Drive](https://drive.google.com/drive/folders/1Qck3z_t6XLRXb2vbN-00931DgdJZ0yse?usp=sharing) del **Club de R para RRHH** o mirá los videos en [Youtube](https://youtube.com/playlist?list=PLZuVytUJrxQlcqu6l-P3ou4vV2mRJU2Ka).
+
+## Funciones o verbos de dplyr
+
+Tené a mano el [cheatsheet de data-wrangling](https://drive.google.com/file/d/1ViFJRuby7FTDgjWvp9P6hKO3MEHgeH_M/view?usp=sharing) en castellano. Los cheatsheets (machetes, cola, trencito, torpedo, chuleta, copiatín, plage, chanchullo) son ayuda memorias con las principales funciones de un paquete.
+
+Las funciones que vimos en el curso (que no son todas las del paquete) son:
+
+-   **left_join():** Permite unir información de varias tablas. Los sistemas de gestión de RRHH tienen por ejemplo una tabla que tiene información básica de las personas (nombre y apellido, fecha de nacimiento, etc.), otra tabla con la remuneración base y los conceptos salariales que le correspondan, y podría tener otras tablas con las evaluaciones de desempeño y así sucesivamente. Hay muchos tipos distintos de `join`, pero a los fines prácticos de este curso nos quedaremos con `left_join()` que es una función equivalente a realizar un *buscarv* o un *vlookup* en Excel.
+
+-   **select():** Permite seleccionar las columnas con las que queremos trabajar. También permite acomodarlas en el orden que las necesitemos, y también la podemos usar para descartar variables que no necesitemos.
+
+-   **filter():** Nos permite filtrar las filas que cumplan con una o más condiciones. Por ejemplo, si queremos hacer un análisis de un grupo específico de empleados (por ejemplo Líderes), vamos a filtrar de una tabla de empleados, los empleados que tengan una posición de liderazgo.
+
+-   **arrange():** Ordena los resultados por una o más variables. Esto nos permite mostrar los resultados de una manera más organizada. Por default los resultados los ordenará alfabéticamente (de la A a la Z) en el caso de variables de texto, o de manera ascendente.
+
+-   **group_by():** Por ejemplo, si quiero analizar los sueldos promedios por puesto, un paso previo que tenemos que hacer es *agrupar* los datos por la variable `puesto` antes de calcular el promedio. Es un paso previo que realizaremos siempre antes de hacer algún cálculo de resumen estadístico.
+
+-   **summarise():** Es la función que nos permite hacer cálculos de resumen estadístico (calcular promedios, medianas, contar filas, desvíos estándares, etc.). Lo
+
+-   **mutate():** Uno de los principales usos de `mutate()` es el de crear una nueva variable (columna) en nuestro dataframe original en base a alguna columna que ya exista. Por ejemplo, si tengo una columna que contenga el sueldo básico mensual de un empleado, podría añadir otra columna que calcule las cargas sociales, o bien el costo anual de cada colaborador/a. Otro uso que se le da es para modificar las características de una variable (lo veremos en un ejercicio).
+
+## El "pipe" %\>%
+
+Uno de los paquetes de tidyverse, el paquete `dplyr` aporta un símbolo conocido como *"pipe"* `%>%` (*tubo* en inglés). El atajo de teclado es con las teclas *Ctrl +Shift +M* en Windows, o *Cmd + Shift + M* en Mac.
+
+Lo que nos permite este *pipe* o *tubo* es escribir los códigos en secuencias, haciendo muchísimo más fácil escribir y leer secuencias de funciones que incluyan varios pasos.
+
+Imaginemos que queremos comprar regalos por el día del niño a todos los empleados de la empresa que tengan hijos. Para esto, necesitamos un listado de los empleados que tengan hijos, ordenados por sector. Para lograr esto los pasos que tenemos que seguir son:
+
+1.  Seleccionar las columnas `AREA`, `ID` e `HIJOS` del dataframe `nomina`.
+
+2.  Filtrar los empleados que tengan hijos (donde en la columna `HIJOS` el valor sea mayor que cero.
+
+3.  Ordenar los resultados por `AREA`.
+
+Veamos cómo se ve el código sin el uso del pipe `%>%` y usándolo. ¿Cuál te parece la forma más sencilla de entender la secuencia de análisis?
+
+```{r ej3, echo=TRUE, eval=FALSE}
+
+# Ejemplo de funciones anidadas sin usar el pipe
+arrange(filter(select(nomina, AREA,ID, HIJOS), HIJOS > 0), AREA)
+
+# Ejemplo de funciones anidadas usando el pipe
+nomina %>% 
+  select(AREA, ID, HIJOS) %>% 
+  filter(HIJOS > 0) %>% 
+  arrange(AREA)
+
+```
+
+## Ejercicios
+
+```{r fuente, echo = FALSE, warning=FALSE, message=FALSE}
+library(openxlsx)
+library(tidyverse)
+
+plantel <- read.xlsx("Nomina.xlsx")
+salarios <- read.xlsx("Puestos.xlsx")
+
+mensualizados <- plantel %>% 
+  left_join(salarios, by ="ID") %>% 
+  filter(!is.na(PUESTO))
+
+```
+
+### Unir datos con left_join()
+
+Tenemos dos dataframes, uno con información general de los empleados. El dataframe `plantel` contiene 8 variables:
+
+-   ID: el dato de identificación única de cada persona de la empresa.
+
+-   ANTIGUEDAD: Los años de permanencia en la organización.
+
+-   EDAD: La edad de los colaboradores.
+
+-   ESTADO_CIVIL: El estado civil de los trabajadores/as de la compañía.
+
+-   HIJOS: La cantidad de hijos que tiene cada colaborador.
+
+-   AREA: El sector en el que trabaja cada persona.
+
+-   ID_CAT: La clave identificatoria de las categorías de los trabajadores.
+
+-   N_CATEG: El nombre de cada categoría.
+
+    Veamos la estructura del dataframe.
+
+```{r}
+str(plantel)
+```
+
+El siguiente dataframe, `salarios` contiene los siguientes campos:
+
+-   ID: el campo que nos permitirá unir las diferentes tablas.
+
+-   PUESTO: el nombre real del puesto que ocupa cada persona.
+
+-   SUELDO: La remuneración básica mensual de cada empleado.
+
+Prestá atención a la estructura del archivo y contesta la pregunta.
+
+```{r}
+str(salarios)
+```
+
+```{r left-q}
+quiz(
+  question("¿Cuántas filas y columnas tiene el dataframe 'salarios'?",
+  answer("135 columnas y 3 variables", message = "Las observaciones son las filas y las variables son las columnas"),
+  answer("130 filas y 10 variables", message = "Mirá de nuevo el resultado de la estructura del dataframe salarios. Primero indica las observaciones, y luego las variables"),
+  answer("135 filas y 3 columnas", correct = TRUE, message = "Muy bien!"),
+  submit_button = "Enviar respuesta",
+  try_again_button = "Intenta de nuevo",
+  allow_retry = TRUE
+))
+```
+
+Ahora vamos a unir ambos dataframes en uno solo para poder hacer nuestros análisis.
+
+Usaremos la función `left_join()` para agregar al dataframe `plantel` los datos del dataframe `salarios.`
+
+```{r leftjoin, exercise = TRUE}
+# Agrega al dataframe 'plantel' el dataframe 'salarios'
+empleados <- left____(_____, _____, by = "ID")
+
+```
+
+```{r leftjoin-hint}
+# Recuerda poner la función left_join()
+# Añade al dataframe 'plantel', los datos de 'salarios' por la columna ID
+# Cuidado con mayúsculas y minúsculas
+```
+
+```{r leftjoin-solution}
+empleados <- left_join(plantel, salarios, by = "ID")
+```
+
+### select()
+
+Con la función `select()` podemos elegir las columnas que nos interesa trabajar. Por ejemplo, prueba de correr la función `str()` con el nuevo dataframe `empleados`.
+
+```{r str, exercise = TRUE, exercise.lines = 5}
+# Corre esta línea de código
+str(empleados)
+```
+
+Las variables `ANTIGUEDAD`, `EDAD`, `ESTADO_CIVIL` e `HIJOS` no tienen mucho sentido para un análisis salarial. En el próximo ejercicio, selecciona las columnas `ID`, `AREA`, `PUESTO`, `SUELDO` y guarda la selección en un objeto llamado `mensuales.`
+
+```{r select, exercise = TRUE, exercise.lines = 5}
+mensuales <- empleados %>% 
+  _______(___, ___, ____, ____)
+```
+
+```{r select-hint}
+# Usa la función select()
+# Dentro del paréntesis pon los nombres de las variables que nos interesa analizar
+```
+
+```{r select-solution}
+mensuales <- empleados %>%          # Crea un nuevo dataframe con los datos de empleados
+  select(ID, AREA, PUESTO, SUELDO)  # Selecciona las variables de interés
+```
