@@ -4,14 +4,16 @@
 # Esto es un comentario
 
 
-objeto_1<-1979
+objeto_1 <- 1979
 
-objeto_2 <- 2020 - 1979
+objeto_2 = 2021 - 1979
+
+objeto_2
 
 
 (objeto_3 = objeto_1 + objeto_2)
 
-
+# Vector: conjunto de valores
 objeto_4 <- c(1,8,6,9,7)
 
 # Para ver el resultado del objeto uso las teclas Ctrl + Enter
@@ -23,7 +25,9 @@ objeto_2
 
 # Vector de Texto
 nombres <- c("John", "Mick", "Ringo", "George") 
+
 nombres
+
 # Las variables de texto van siempre con comillas.
 
 # Cambiar un elemento del vector 
@@ -55,7 +59,7 @@ beatles[3,]
 
 # Seleccionando una columna entera
 beatles[,3]
-beatles[,"anio_nacimiento"]
+beatles[,c("nombres", "anio_nacimiento")]
 
 
 #Modificar un elemento puntual de un dataframe
@@ -92,16 +96,20 @@ curso2 <- cbind(comision1, comision2)
 curso2
 
 #### Cargar un archivo ####
-## install.packages("openxlsx") # Saquen los dos símbolos ## para correr esta línea de código por primera vez
+
+install.packages("openxlsx") 
 
 library(openxlsx)
 
 
 # Cargar un archivo de excel
 
-nomina <- read.xlsx("Datasets/Nomina.xlsx")
+nomina <- read.xlsx("Nomina.xlsx")
+
+
 
 #### Funciones exploratorias ####
+
 # Ver los primeros 6 registros
 head(nomina)
 
@@ -123,9 +131,10 @@ summary(nomina)
 nomina$ESTADO_CIVIL <- as.factor(nomina$ESTADO_CIVIL)
 
 # Ahora al menos podemos ver la cantidad de personas casadas, en concubinato y solteras.
-summary(nomina$ESTADO_CIVIL)
+summary(nomina)
 
 # Una gran librería para explorar datasets
+# install.packages("funModeling")
 library(funModeling)
 
 status(nomina)
@@ -137,12 +146,13 @@ status(nomina)
 library(tidyverse)
 
 
+
 # Los verbos de dplyr y el pipe
-nomina %>%  
-  select(AREA, EDAD) %>% # Selecciona las columnas
-  group_by(AREA) %>%     # Agrupa por la variable AREA
-  summarise(edad_promedio = mean(EDAD)) %>% # Crea una variable con la edad promedio
-  arrange(-edad_promedio) # Ordena descendentemente los resultados por la variable que pasemos.
+nomina %>%
+  select(AREA, EDAD) %>%          # Selecciona las columnas
+  group_by(AREA) %>%              # Agrupa por la variable AREA
+  summarise(edad_promedio = mean(EDAD)) %>%   # Crea una variable con la edad promedio
+  arrange(-edad_promedio)     # Ordena descendentemente los resultados por la variable que pasemos.
 
 # Problema: listar los empleados con hijos, ordenados por área.
 # Tarea: seleccionar las columnas, Area, ID de Empleado, e Hijos, filtrar por los que tienen hijos,
@@ -157,9 +167,21 @@ nomina %>%
   filter(HIJOS>0) %>%
   arrange(AREA) 
 
+regalos <- nomina %>%
+  select(AREA, ID, HIJOS) %>%
+  filter(HIJOS>0) %>%
+  arrange(AREA) 
+
+write.xlsx(x = regalos, file = "regalos.xlsx")
+
+
 # La función select
 nomina %>% 
   select(AREA, ID, HIJOS) 
+
+
+nomina %>% 
+  select(-HIJOS)
 
 
 # Variante para seleccionar sólo los datos numéricos.
@@ -172,6 +194,8 @@ empleados_con_hijos <- nomina %>%
   filter(HIJOS > 0) 
 
 empleados_con_hijos
+
+
 
 # Filtrar todos los empleados de RRHH
 nomina %>% 
@@ -239,10 +263,20 @@ nomina %>%
   summarise(Ant_Promedio = mean(ANTIGUEDAD)) # Crea una columna llamada Ant_Promedio 
                                             # y calcula el promedio de antigüedad por área
 
+nomina %>%
+  select(AREA, ANTIGUEDAD) %>%
+  group_by(AREA) %>%
+  summarise(Ant_Promedio = mean(ANTIGUEDAD),
+            desvio = sd(ANTIGUEDAD))
+
+
+
+
 # Crea columnas nuevas. También se usa para modificar las columnas.
 nomina %>%
   select(ID, EDAD) %>%
-  mutate(Diferencia_Edad = EDAD - mean(EDAD)) 
+  mutate(Diferencia_Edad = EDAD - mean(EDAD),
+         conteo = 1) 
 
 # Función rename
 nomina <- nomina %>%
@@ -254,7 +288,7 @@ names(nomina)
 #### Unir archivos ####
 
 # Traemos una tabla nueva
-puestos <- read.xlsx("Datasets/Nomina.xlsx", sheet = "Puestos")
+puestos <- read.xlsx("Nomina.xlsx", sheet = "Puestos")
 
 # Usemos una función de tidyverse para explorar el dataframe
 glimpse(puestos)
@@ -268,6 +302,7 @@ glimpse(nomina_full)
 # Creo una subtabla nueva filtrando los datos no nulos de la variable PUESTO
 mensuales <- nomina_full %>% 
   filter(!is.na(PUESTO))
+
 
 glimpse(mensuales)
 
@@ -302,6 +337,10 @@ ggplot(sueldos_promedios,
   
 
 status(nomina_full)
+
+mensuales %>% 
+  select(SUELDO) %>% 
+   mutate(SUELDO_ANUAL = SUELDO * 13)
 
 #### Ejercicios ####
 

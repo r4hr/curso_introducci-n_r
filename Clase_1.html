@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introducción a R para RRHH</title>
+    <meta charset="utf-8" />
+    <script src="Clase_1_files/header-attrs/header-attrs.js"></script>
+    <link href="Clase_1_files/remark-css/default.css" rel="stylesheet" />
+    <link href="Clase_1_files/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="Clase_1_files/remark-css/tamu-fonts.css" rel="stylesheet" />
+    <link href="Clase_1_files/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: inverse, top, center
+background-image: url(Archivos/portada.png)
+background-size: cover
+
+
+
+---
+class: inverse
+
+## Antes de empezar
+
+Si quieren compartir imágenes del curso en redes sociales lo pueden hacer, tanto si les gustó como si no les gustó.
+
+--
+
+.pull-left[
+Los hashtags que pueden usar son 
+* ### #R4HR 
+* ### #RStats_ES 
+* ### #data4hr 
+* ### #BetterWithData
+* ### #PeopleAnalytics 
+* ... y el hashtag que quieran
+
+
+También pueden arrobar a Data 4HR y unirse a los grupos
+
+`&lt;i class="fab  fa-facebook "&gt;&lt;/i&gt;`{=html} [Freakys de RRHH](https://www.facebook.com/groups/freakysderrhh)
+
+`&lt;i class="fab  fa-slack "&gt;&lt;/i&gt;`{=html} [Slack R4HR](https://join.slack.com/t/r4hr/shared_invite/zt-geqfwra8-iZv3G5admNbyuej2gyFQDg)
+
+]
+
+.pull-right[
+&lt;img src="https://media.giphy.com/media/l0IycI0rreFNQwmSQ/giphy.gif" /&gt;
+]
+
+
+---
+
+## Antes de empezar
+
+Algunas cosas que tienen que saber:
+
+* El link de Zoom va a ser siempre el mismo. 🛰
+
+--
+
+* No hace falta que tengan la cámara encendida. 🕵
+
+--
+
+* Las clases las grabo y las comparto de manera privada por Youtube. 🎥
+
+--
+
+* Vamos a usar documentos compartidos para tomar notas. 📖
+
+--
+
+* Súmense al grupo de [Slack](https://join.slack.com/t/r4hr/shared_invite/zt-geqfwra8-iZv3G5admNbyuej2gyFQDg) ya que todas las consultas las hacemos por ahí. 🤜🤛
+
+--
+
+* Pueden interrumpir las veces que quieran. 🙋
+
+
+---
+
+# Clase 1 - Introducción a R y Tidyverse
+## R
+
+R es un lenguaje de código abierto, creado principalmente para el análisis estadístico de datos.
+
+Su popularidad se debe gracias a la enorme comunidad global que permanentemente actualiza paquetes, y genera contenido. Aparte de los desarrollos de machine learning que se hacen en todo el mundo, te podés encontrar con:
+
+--
+
+* La [BBC](https://github.com/bbc/bbplot) y [The Economist](http://rstudio-pubs-static.s3.amazonaws.com/284329_c7e660636fec4a42a09eed968dc47f32.html) construyendo paquetes y *temas* para los gráficos.
+
+--
+
+* [Airbnb](https://peerj.com/preprints/3182.pdf) usándolo para sus investigaciones, modelos y reportes.
+
+--
+
+* Yo lo uso para los informes de nuestros proyectos...
+
+--
+
+.right[... y para hacer estas presentaciones 👍]
+
+---
+
+## Ventajas de R
+
+Aprender R para RRHH tiene inagotables ventajas:
+
+* Hacer análisis predictivos (Clase 3 de este curso!)
+* Reproducir el trabajo
+* Más capacidad de procesamiento que Excel
+* Automatizar el trabajo
+* Analizar **todo** tipo de datos
+  * Tablas
+  * Bases de Datos, Sistemas de Gestión
+  * Texto libre
+  * Imágenes
+* Enviar mails con reportes automáticos
+* Escribir libros, blogs, CV
+* La comunidad de R
+
+---
+## La comunidad de R
+
+R cuenta con una red de soporte muy amplia, sólida y solidaria, especialmente en Latinoamérica. Prácticamente en todos los países del continente hay RUG (R Users Group) para el público en general, y toda una red de R-Ladies que promueven la diversidad de mujeres y de minorías, para generar mejores oportunidades laborales.
+
+&lt;img src="Archivos/rugs.png" /&gt;
+
+Pueden explorar todos los RUG [https://benubah.github.io/r-community-explorer/rladies.html](https://benubah.github.io/r-community-explorer/rladies.html)
+
+---
+## El Club de R para RRHH
+&lt;br&gt;&lt;br&gt;
+
+.pull-left[
+&lt;img src="Archivos/Catbert.png" /&gt;
+]
+
+En esta misma línea, desde Mayo de 2020 empezamos a desarrollar una comunidad específica para el mundo de RRHH, donde nos reunimos el primer sábado de cada mes los sábados de 10:00 a 11:30 hs. (hora de Argentina) para aprender a programar en este lenguaje.
+
+Revisamos paquetes, exploramos formas de hacer análisis predictivos, y el plan es poder desarrollar una red similar a los RUGs y R-Ladies.
+
+
+&gt; **Todo el contenido generado por mí en el Club lo pueden usar para sus propios grupos y cursos**
+
+---
+## Aprender a programar
+
+Al principio programar es un acto de fe. Vemos que pasan cosas, que escribo algo y una cosa aparece en la pantalla pero no sabemos por qué, cómo, y por qué no me sale de nuevo.
+
+En particular R, y sus paquetes, permiten expresar lo que quiero programar mayormente de una forma similar a la que lo haría si tuviera que dar las instrucciones verbalmente a alguien. Y a diferencia de otros lenguajes como html por ejemplo, la sintaxis del código (las instrucciones) es mucho más simple (entren a cualquier página web y aprieten F12).
+
+También les va a pasar con este curso que muchas cosas les va a resultar más sencillas de hacer en Excel. O que tal vez buscando en internet encontraste otra forma de hacer las cosas, y está bien que así sea.
+
+Lo único que van a necesitar para programar es:
+
+* Paciencia
+* Constancia
+* Curiosidad
+
+Y con el tiempo, y la práctica, un día tenés una epifanía y todo lo que volcas en un código cobra sentido.
+
+
+---
+class: inverse, center, middle
+# Basta de cháchara!
+&lt;img src="https://img.redbull.com/images/c_crop,x_230,y_0,h_1030,w_824/c_fill,w_860,h_1075/q_auto,f_auto/redbullcom/2019/07/17/44f55f2f-a5f9-44d0-9c62-31672feca5a2/hay-tabla" width="40%"/&gt;
+
+
+---
+# El lenguaje R
+
+
+En rigor a la verdad, R es un **lenguaje**, no un programa. Lo que escribimos en la consola de R (de ahora en adelante, el *script*) son las instrucciones para que la computadora ejecute lo que le pedimos.
+
+--
+
+Usamos *RStudio* porque nos facilita seguir el código, ver y copiar los resultados, gestionar los archivos de fuentes de datos, ver los gráficos, etc..
+
+--
+
+.center[
+&lt;img src="Archivos/paneles-rstudio.png" width="48%" /&gt;
+]
+---
+class: inverse, center, middle
+# Personalizando RStudio
+
+&lt;img src="https://e00-elmundo.uecdn.es/blogs/elmundo/asesinoenserie/imagenes_posts/2017/10/22/189006_540x360.jpg" /&gt;   
+---
+
+
+# El lenguaje R
+## Proyectos
+
+Trabajar con proyectos en RStudio hace que todo el trabajo sea más sencillo. Los proyectos crean una carpeta en nuestra PC en donde se almacenarán los archivos, tablas, scripts, y hace que todo sea más organizado.
+
+--
+
+Para crear un proyecto tenés podés entrar en:
+* *File*
+  * *New project*
+
+Y luego poner el nombre de la carpeta.
+
+.pull-left[&lt;img src="Archivos/new_project.png" width="60%" /&gt;]
+
+
+.pull-rigt[&lt;img src="Archivos/new_projecto.png" width="30%" /&gt;]
+
+---
+
+# El lenguaje R
+## Objetos
+
+--
+
+Por definición, R es un lenguaje *orientado a objetos*. Esto significa que a una tabla, un valor, una variable, etc. le voy a poner un nombre, y esa cosa que ahora tiene nombre se llama **objeto**.
+
+Esto nos simplifica un montón la vida. La asignación la hacemos con el símbolo `&lt;-` que simula una flecha hacia la izquierda. También se puede hacer con el símbolo `=` pero como muchas veces lo utilizamos para configurar un parámetro de una función usamos *"la flechita"*. 
+
+
+```r
+# Esto es un comentario
+
+objeto_1 &lt;- 1979
+objeto_2 &lt;- 2020-1979
+
+# Para ver el resultado del objeto uso las teclas Ctrl + Enter
+# También puedo usar el ícono  "Run"
+objeto_1
+```
+
+```
+## [1] 1979
+```
+
+```r
+objeto_2
+```
+
+```
+## [1] 41
+```
+
+---
+## Tipos de objetos
+
+Tenemos varios tipos de objetos. Uno de los objetos más utilizados son los **vectores** que son conjuntos de valores, numéricos, de texto, o combinados.
+
+
+```r
+# Vector de Texto
+nombres &lt;- c("John", "Mike", "Ringo", "George") 
+nombres
+```
+
+```
+## [1] "John"   "Mike"   "Ringo"  "George"
+```
+
+```r
+# Las variables de texto van siempre con comillas.
+
+# Cambiar un elemento del vector 
+nombres[2] &lt;- "Paul"
+nombres
+```
+
+```
+## [1] "John"   "Paul"   "Ringo"  "George"
+```
+
+```r
+# Vector numérico
+anio_nacimiento &lt;- c(1940, 1942, 1940, 1943)
+viven &lt;- c(0,1,1,0)
+```
+
+
+---
+
+## Dataframes
+
+Vamos a llamar **dataframe** a los *datasets*, a las tablas que contienen nuestros datos. Al igual que una planilla de cálculo, tiene filas y columnas.
+
+Podemos crear dataframes con los vectores que tengan la misma cantidad de objetos.
+
+
+```r
+instrumentos &lt;- c("guitar", "bass", "drums", "piano")
+
+# Crear un dataframe con los vectores
+*beatles &lt;- data.frame(nombres, instrumentos, anio_nacimiento, viven)
+
+beatles
+```
+
+```
+##   nombres instrumentos anio_nacimiento viven
+## 1    John       guitar            1940     0
+## 2    Paul         bass            1942     1
+## 3   Ringo        drums            1940     1
+## 4  George        piano            1943     0
+```
+
+---
+## Dataframes
+
+.pull-left[Para acceder a un elemento de un dataframe tenemos que usar la siguiente lógica:
+
+`nombre_dataframe[fila, columna]`
+
+
+```r
+beatles[1,3]
+```
+
+```
+## [1] 1940
+```
+
+--
+
+Si queremos elegir toda una fila dejamos el espacio de la columna vacío
+
+```r
+beatles[3,]
+```
+
+```
+##   nombres instrumentos anio_nacimiento viven
+## 3   Ringo        drums            1940     1
+```
+]
+
+--
+
+.pull-right[
+Lo mismo para seleccionar una columna
+
+```r
+beatles[,3]
+```
+
+```
+## [1] 1940 1942 1940 1943
+```
+
+--
+
+Y si quiero cambiar un elemento puntual puedo hacerlo de la siguiente manera
+
+```r
+beatles[4,2] &lt;- "guitar"
+beatles
+```
+
+```
+##   nombres instrumentos anio_nacimiento viven
+## 1    John       guitar            1940     0
+## 2    Paul         bass            1942     1
+## 3   Ringo        drums            1940     1
+## 4  George       guitar            1943     0
+```
+
+]
+
+---
+
+## Dataframes
+
+Para seleccionar más de una columna podemos hacerlo de dos maneras:
+
+1. Si son columnas contiguas usando `:`.
+
+
+```r
+beatles[,2:4]
+```
+
+```
+##   instrumentos anio_nacimiento viven
+## 1       guitar            1940     0
+## 2         bass            1942     1
+## 3        drums            1940     1
+## 4       guitar            1943     0
+```
+
+--
+
+Si las columnas no están contiguas.
+
+```r
+beatles[, c(2, 4)]
+```
+
+```
+##   instrumentos viven
+## 1       guitar     0
+## 2         bass     1
+## 3        drums     1
+## 4       guitar     0
+```
+
+--
+
+También podemos usar los nombres de las variables. No olviden las comillas!
+
+
+```r
+beatles[,c("nombres", "viven")]
+```
+
+```
+##   nombres viven
+## 1    John     0
+## 2    Paul     1
+## 3   Ringo     1
+## 4  George     0
+```
+
+
+
+---
+# El lenguaje R
+## Paquetes
+
+Los paquetes son *"programitas"* que amplían las capacidades de R para hacer cosas específicas, simplificando la programación.
+
+--
+
+La mayoría de los paquetes son curados por [CRAN](https://cran.r-project.org/) y se instalan de manera muy simple con la función `install.packages()`.
+
+
+```r
+install.packages("openxlsx")
+```
+
+Las comillas son muy importantes
+
+--
+
+La instalación se hace una sola vez. Para usarlo, cada vez que abrimos el *script* tenemos que cargarlo con la función `library()`. A diferencia de la instalación, no hace falta las comillas. 
+
+
+```r
+library(openxlsx)
+```
+
+```
+## Warning: package 'openxlsx' was built under R version 4.0.4
+```
+
+---
+# El lenguaje R
+## Carguemos nuestro primer archivo
+
+Para cargar archivos en R, una buena práctica es asignar el dataset, o conjunto de datos, a un objeto.
+
+```r
+nomina &lt;- read.xlsx("Nomina.xlsx")
+```
+
+--
+
+Ahora, a explorarlo. Podemos ver las primeras filas con la función `head()`.
+
+
+```r
+head(nomina)
+```
+
+```
+##     ID ANTIGUEDAD EDAD ESTADO_CIVIL HIJOS             AREA ID_CAT
+## 1 1757          2   51            C     1 GERENCIA GENERAL     GM
+## 2  180         38   63            C     1         TEMPLADO      5
+## 3  242         37   64            C     2         TEMPLADO      5
+## 4  260         36   61            C     2         TEMPLADO      5
+## 5  277         36   64            S     4         LAMINADO      5
+## 6  278         36   59            C     0         TEMPLADO      4
+##                      N_CATEG
+## 1            GERENTE GENERAL
+## 2 OP. POLIV. AMPLIAM. ESPEC.
+## 3 OP. POLIV. AMPLIAM. ESPEC.
+## 4 OP. POLIV. AMPLIAM. ESPEC.
+## 5 OP. POLIV. AMPLIAM. ESPEC.
+## 6 OP. POLIV. ESPEC. COMPLETO
+```
+
+---
+## Explorando el dataset
+
+Ver la cantidad de filas y columnas:
+
+
+```r
+str(nomina)
+```
+
+```
+## 'data.frame':	522 obs. of  8 variables:
+##  $ ID          : num  1757 180 242 260 277 ...
+##  $ ANTIGUEDAD  : num  2 38 37 36 36 36 35 35 35 40 ...
+##  $ EDAD        : num  51 63 64 61 64 59 57 54 56 59 ...
+##  $ ESTADO_CIVIL: chr  "C" "C" "C" "C" ...
+##  $ HIJOS       : num  1 1 2 2 4 0 1 4 3 2 ...
+##  $ AREA        : chr  "GERENCIA GENERAL" "TEMPLADO" "TEMPLADO" "TEMPLADO" ...
+##  $ ID_CAT      : chr  "GM" "5" "5" "5" ...
+##  $ N_CATEG     : chr  "GERENTE GENERAL" "OP. POLIV. AMPLIAM. ESPEC." "OP. POLIV. AMPLIAM. ESPEC." "OP. POLIV. AMPLIAM. ESPEC." ...
+```
+
+--
+
+Los nombres de las variables.
+
+
+```r
+names(nomina)
+```
+
+```
+## [1] "ID"           "ANTIGUEDAD"   "EDAD"         "ESTADO_CIVIL" "HIJOS"       
+## [6] "AREA"         "ID_CAT"       "N_CATEG"
+```
+
+
+---
+
+## Explorando el dataset
+
+Otra función muy utilizada de R es `summary()`.
+
+
+```r
+summary(nomina)
+```
+
+```
+##        ID           ANTIGUEDAD          EDAD       ESTADO_CIVIL      
+##  Min.   : 180.0   Min.   : 0.000   Min.   :21.00   Length:522        
+##  1st Qu.: 886.5   1st Qu.: 3.000   1st Qu.:29.00   Class :character  
+##  Median :1664.0   Median : 7.000   Median :35.00   Mode  :character  
+##  Mean   :1873.6   Mean   : 8.839   Mean   :37.35                     
+##  3rd Qu.:3087.8   3rd Qu.:10.000   3rd Qu.:44.00                     
+##  Max.   :3222.0   Max.   :40.000   Max.   :65.00                     
+##      HIJOS           AREA              ID_CAT            N_CATEG         
+##  Min.   :0.000   Length:522         Length:522         Length:522        
+##  1st Qu.:0.000   Class :character   Class :character   Class :character  
+##  Median :1.000   Mode  :character   Mode  :character   Mode  :character  
+##  Mean   :1.588                                                           
+##  3rd Qu.:2.000                                                           
+##  Max.   :8.000
+```
+
+---
+
+## Explorando el dataset
+
+La función summary nos muestra, de las variables numéricas:
+
+* El valor mínimo
+* 1er. y 3er. cuartil
+* Mediana
+* Promedio (mean)
+* El valor máximo
+
+--
+
+De las variables de tipo texto, como es de tipo `character` sólo nos indica la cantidad de observaciones. Si la cambiamos a tipo `factor` podemos obtener otra información.
+
+
+```r
+# Cambiamos el tipo de variable de 'character' a 'factor'
+nomina$ESTADO_CIVIL &lt;- as.factor(nomina$ESTADO_CIVIL)
+
+summary(nomina$ESTADO_CIVIL)
+```
+
+```
+##   C   K   S 
+## 217  94 211
+```
+
+---
+
+## Explorando los datos
+
+También existen paquetes especiales, como `funModeling`y `tidyverse` que tienen funciones para explorar datos.
+
+El paquete funModeling fue desarrollado por [Pablo Casas](https://www.linkedin.com/in/pcasas/) de la [Escuela de Datos Vivos](https://escueladedatosvivos.ai/courses).
+
+
+```r
+library(funModeling)
+
+status(nomina)
+```
+
+```
+##                  variable q_zeros    p_zeros q_na p_na q_inf p_inf      type
+## ID                     ID       0 0.00000000    0    0     0     0   numeric
+## ANTIGUEDAD     ANTIGUEDAD      40 0.07662835    0    0     0     0   numeric
+## EDAD                 EDAD       0 0.00000000    0    0     0     0   numeric
+## ESTADO_CIVIL ESTADO_CIVIL       0 0.00000000    0    0     0     0    factor
+## HIJOS               HIJOS     145 0.27777778    0    0     0     0   numeric
+## AREA                 AREA       0 0.00000000    0    0     0     0 character
+## ID_CAT             ID_CAT       0 0.00000000    0    0     0     0 character
+## N_CATEG           N_CATEG       0 0.00000000    0    0     0     0 character
+##              unique
+## ID              522
+## ANTIGUEDAD       35
+## EDAD             45
+## ESTADO_CIVIL      3
+## HIJOS             9
+## AREA             17
+## ID_CAT           19
+## N_CATEG          23
+```
+
+
+---
+
+# El paquete tidyverse
+
+RStudio además de desarrollar la IDE para usar R, es también uno de los principales desarrolladores de paquetes.
+
+Uno de sus paquetes, que engloba varios paquetes, se convirtió en un estándar de la limpieza y transformación de datos, que es **tidyverse**. A este estándar de limpieza de datos se lo llama *tidy data*, en donde entre sus principios dice:
+
+&gt; Cada variable forma una columna.
+
+&gt; Cada observación tiene que estar en una fila.
+
+.right[&lt;img src="Archivos/hex_tidyverse.png" /&gt;]
+
+---
+
+# El paquete tidyverse
+
+.center[&lt;img src="Archivos/tidyverse_packages.png" width="20%" /&gt;]
+
+Tidyverse es un paquete que engloba varios paquetes, todos muy utilizados, a veces declarativamente, otras veces R lo usa detrás de escenas. En esta sesión vamos a usar principalmente los paquetes **dplyr** y **ggplot2**. Primero hay que instalar el paquete y luego cargarlo
+
+
+```r
+install.packages("tidyverse")
+```
+
+```r
+library(tidyverse)
+```
+
+```
+## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --
+```
+
+```
+## v tibble  3.1.0     v dplyr   1.0.4
+## v tidyr   1.1.2     v stringr 1.4.0
+## v readr   1.4.0     v forcats 0.5.1
+## v purrr   0.3.4
+```
+
+```
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter()    masks stats::filter()
+## x dplyr::lag()       masks stats::lag()
+## x dplyr::src()       masks Hmisc::src()
+## x dplyr::summarize() masks Hmisc::summarize()
+```
+
+
+---
+
+# El paquete tidyverse
+
+Una de las razones por las cuales tidyverse se hizo tan popular es que la lógica de las funciones imita el razonamiento que haríamos verbalmente.
+
+--
+
+Por ejemplo, ¿cómo harían para calcular la edad promedio por área?
+
+--
+
+
+```r
+nomina %&gt;% 
+  select(AREA, EDAD) %&gt;% # Selecciona las columnas
+  group_by(AREA) %&gt;%     # Agrupa por la variable AREA
+  summarise(edad_promedio = mean(EDAD)) %&gt;% # Crea una variable con la edad promedio
+  arrange(-edad_promedio) # Ordena descendentemente los resultados por la variable que pasemos.
+```
+
+```
+## # A tibble: 17 x 2
+##    AREA             edad_promedio
+##    &lt;chr&gt;                    &lt;dbl&gt;
+##  1 COMPRAS                   47.3
+##  2 GERENCIA GENERAL          45.5
+##  3 FACILITIES                45.2
+##  4 ALMACEN                   41  
+##  5 DESARROLLO                40.5
+##  6 TEMPLADO                  39.5
+##  7 LOGISTICA OE              38.6
+##  8 LAMINADO                  37.7
+##  9 INSERTOS                  36.0
+## 10 ENCAPSULADO               35.8
+## 11 CALIDAD                   35.6
+## 12 RRHH                      35.4
+## 13 LOGISTICA AGR             34.2
+## 14 COMERCIAL OE              30  
+## 15 MASS                      30  
+## 16 COMERCIAL AGR             29.7
+## 17 FINANZAS                  29.5
+```
+
+---
+
+# El paquete tidyverse
+## dplyr
+
+¿Vieron este símbolo `%&gt;%` en la slide anterior? En la jerga lo conocemos como *"pipe"* (atajo de teclado Ctrl + Mayús + M). Lo que nos permite este *"tubo"* es ordenar el código en secuencias, haciéndolo más comprensible a la lectura.
+
+Una de las ventajas del *pipe* es que no necesitamos invocar al dataframe en cada función que encadenamos en el pipe.
+
+.center[
+&lt;img src="Archivos/dplyr_funciones.png" width="57%"/&gt;
+]
+
+---
+
+## dplyr
+
+Por ejemplo, queremos ver los empledos que tienen hijos por cada área. Los pasos son:
+
+1. Elegir las variables AREA, ID, HIJOS.
+2. Filtrar de la variable HIJOS los casos en que sí tengan hijos.
+3. Ordenar los resultados por área.
+
+&gt; Acá estoy usando la función `head()` para que quede prolijo en la presentación. Ustedes no la usen y recuerden sacar el último paréntesis
+
+
+```r
+head(arrange(filter(select(nomina, AREA,ID, HIJOS), HIJOS &gt; 0), AREA))
+```
+
+```
+##      AREA   ID HIJOS
+## 1 ALMACEN  653     2
+## 2 ALMACEN  741     4
+## 3 ALMACEN  980     2
+## 4 ALMACEN 1436     1
+## 5 ALMACEN 3117     2
+## 6 CALIDAD  404     2
+```
+
+---
+
+## dplyr
+
+Esto mismo usando el pipe de dplyr lo hacemos así:
+
+```r
+nomina %&gt;%
+  select(AREA, ID, HIJOS) %&gt;%
+  filter(HIJOS&gt;0) %&gt;%
+  arrange(AREA) %&gt;% 
+  head()
+```
+
+```
+##      AREA   ID HIJOS
+## 1 ALMACEN  653     2
+## 2 ALMACEN  741     4
+## 3 ALMACEN  980     2
+## 4 ALMACEN 1436     1
+## 5 ALMACEN 3117     2
+## 6 CALIDAD  404     2
+```
+
+---
+
+class: inverse, middle
+background-image: url("Archivos/dplyr.png")
+background-size: cover
+
+
+
+---
+# Las funciones de dplyr
+
+Habitualmente a las funciones del paquete dplyr las llamamos *verbos*. Para muchos paquetes desarrollados por RStudio existe un *cheat sheet* o guía de referencia para ayudarnos a recordar las funciones más utilizadas y se encuentran en este link de [su página](https://rstudio.com/resources/cheatsheets/).
+
+En la sección *Translations* podemos encontrar muchos cheat sheets en español. Acá pueden descargar el de [transformación de datos](https://github.com/rstudio/cheatsheets/raw/master/translations/spanish/data-transformation_Spanish.pdf) que veremos hoy.
+
+---
+# Las funciones de dplyr
+## select()
+
+La función select() sirve para elegir las columnas (variables) con las que queremos trabajar. También nos permite traer las columnas en el orden que las necesitemos.
+
+
+```r
+nomina %&gt;% 
+* select(AREA, ID, HIJOS) %&gt;%
+  head()
+```
+
+```
+##               AREA   ID HIJOS
+## 1 GERENCIA GENERAL 1757     1
+## 2         TEMPLADO  180     1
+## 3         TEMPLADO  242     2
+## 4         TEMPLADO  260     2
+## 5         LAMINADO  277     4
+## 6         TEMPLADO  278     0
+```
+
+---
+
+## select()
+
+select() tiene algunas variantes interesantes (y en general aplican para casi todas las funciones de dplyr).
+
+Supongamos que quiera seleccionar todas las columnas numéricas nada más:
+
+
+
+```r
+nomina %&gt;%
+* select_if(is.numeric) %&gt;%
+  head()
+```
+
+```
+##     ID ANTIGUEDAD EDAD HIJOS
+## 1 1757          2   51     1
+## 2  180         38   63     1
+## 3  242         37   64     2
+## 4  260         36   61     2
+## 5  277         36   64     4
+## 6  278         36   59     0
+```
+
+---
+
+## filter()
+
+.pull-left[
+`filter()` nos permite obtener las filas (observaciones) que cumplen con las condiciones que necesitamos.
+
+Empleados que tienen hijos
+
+
+```r
+nomina %&gt;%
+  select(ID, HIJOS) %&gt;% 
+* filter(HIJOS &gt; 0) %&gt;%
+  head()
+```
+
+```
+##     ID HIJOS
+## 1 1757     1
+## 2  180     1
+## 3  242     2
+## 4  260     2
+## 5  277     4
+## 6  304     1
+```
+
+]
+
+.pull-right[
+Estas son los operadores lógicos que nos van a ayudar con la función filter.
+
+&lt;img src="Archivos/operadores.png" /&gt;
+]
+
+---
+
+## filter()
+
+filter() nos permite obtener las filas (observaciones) que cumplen con las condiciones que necesitamos.
+
+Empleados con antigüedad menor al año, del sector INSERTOS.
+
+
+```r
+nomina %&gt;%
+* filter(ANTIGUEDAD &lt; 1 &amp; AREA == "INSERTOS")
+```
+
+```
+##     ID ANTIGUEDAD EDAD ESTADO_CIVIL HIJOS     AREA ID_CAT
+## 1 1762          0   27            S     0 INSERTOS      C
+## 2 3205          0   27            S     1 INSERTOS      1
+## 3 3210          0   22            S     0 INSERTOS      1
+## 4 3212          0   25            S     0 INSERTOS      1
+## 5 3214          0   25            S     1 INSERTOS      1
+## 6 3215          0   24            S     0 INSERTOS      1
+## 7 3217          0   29            S     0 INSERTOS      1
+## 8 3219          0   21            S     0 INSERTOS      1
+##                   N_CATEG
+## 1                 Cat : C
+## 2 OP. POLIV. PRINCIPIANTE
+## 3 OP. POLIV. PRINCIPIANTE
+## 4 OP. POLIV. PRINCIPIANTE
+## 5 OP. POLIV. PRINCIPIANTE
+## 6 OP. POLIV. PRINCIPIANTE
+## 7 OP. POLIV. PRINCIPIANTE
+## 8 OP. POLIV. PRINCIPIANTE
+```
+
+---
+## filter()
+
+filter() nos permite obtener las filas (observaciones) que cumplen con las condiciones que necesitamos.
+
+Empleados de dos áreas diferentes
+
+```r
+nomina %&gt;%
+* filter(AREA == "FINANZAS"| AREA == "RRHH")
+```
+
+```
+##      ID ANTIGUEDAD EDAD ESTADO_CIVIL HIJOS     AREA ID_CAT N_CATEG
+## 1  1642          7   34            C     2 FINANZAS      D Cat : D
+## 2  1661          5   36            C     2 FINANZAS      J    JEFE
+## 3  1667          5   32            C     0     RRHH      D Cat : D
+## 4  1670          5   36            K     1     RRHH      D Cat : D
+## 5  1689          4   28            C     1 FINANZAS      D Cat : D
+## 6  1692          4   30            S     0 FINANZAS      D Cat : D
+## 7  1699          4   46            S     1     RRHH      D Cat : D
+## 8  1735          2   24            S     0 FINANZAS      D Cat : D
+## 9  1741          1   25            S     0 FINANZAS      B Cat : B
+## 10 1765          0   27            S     0     RRHH      D Cat : D
+## 11 1687          5   36            S     0     RRHH     MG GERENTE
+```
+ 
+--
+
+Una alternativa es usar un vector de selección
+
+```r
+nomina %&gt;%
+* filter(AREA %in% c("FINANZAS", "RRHH"))
+```
+
+---
+
+## arrange()
+
+`arrange()` ordena las variables de acuerdo al criterio que queramos. Por default, ordena los datos ascendentemente.
+
+.pull-left[
+Ordenar los empleados por edad
+
+
+```r
+nomina %&gt;% select(ID, EDAD, AREA) %&gt;%
+* arrange(EDAD) %&gt;%
+  head()
+```
+
+```
+##     ID EDAD          AREA
+## 1 3219   21      INSERTOS
+## 2 3221   21 LOGISTICA AGR
+## 3 3185   22      INSERTOS
+## 4 3210   22      INSERTOS
+## 5 3211   22      LAMINADO
+## 6 1756   23      TEMPLADO
+```
+
+]
+
+--
+
+.pull-right[
+La función `arrange()` también se puede usar con variables de texto.
+
+
+```r
+nomina %&gt;% select(ID, AREA, N_CATEG) %&gt;%
+* arrange(AREA) %&gt;%
+  head()
+```
+
+```
+##     ID    AREA                    N_CATEG
+## 1  653 ALMACEN OP. POLIV. AMPLIAM. ESPEC.
+## 2  741 ALMACEN OP. POLIV. ESPEC. COMPLETO
+## 3  882 ALMACEN OP. POLIV. ESPEC. COMPLETO
+## 4  980 ALMACEN                    Cat : F
+## 5 1436 ALMACEN            LIDER DE EQUIPO
+## 6 1712 ALMACEN                    Cat : D
+```
+
+]
+
+---
+## arrange()
+
+Para ordenar los datos ascendentemente hay dos alternativas.
+
+.pull-left[
+Con la función `desc()`.
+
+
+```r
+nomina %&gt;%
+  select(ID, EDAD) %&gt;%
+* arrange(desc(EDAD)) %&gt;%
+  head()
+```
+
+```
+##     ID EDAD
+## 1  590   65
+## 2 1475   65
+## 3  242   64
+## 4  277   64
+## 5  180   63
+## 6  722   63
+```
+
+]
+
+--
+
+.pull-right[
+Con el signo menos `-`.
+
+```r
+nomina %&gt;%
+  select(ID, ANTIGUEDAD) %&gt;%
+* arrange(-ANTIGUEDAD)  %&gt;%
+  head()
+```
+
+```
+##     ID ANTIGUEDAD
+## 1  345         40
+## 2 1085         40
+## 3 1368         40
+## 4 1091         39
+## 5  180         38
+## 6  242         37
+```
+
+]
+
+---
+
+## group_by()
+
+`group_by()` es una función para agrupar las variables en función de los valores de una de las columnas. Por ejemplo si quiero ver la antigüedad por área.
+
+
+```r
+nomina %&gt;%
+  select(AREA, ANTIGUEDAD) %&gt;%
+* group_by(AREA) %&gt;%
+  head()
+```
+
+```
+## # A tibble: 6 x 2
+## # Groups:   AREA [3]
+##   AREA             ANTIGUEDAD
+##   &lt;chr&gt;                 &lt;dbl&gt;
+## 1 GERENCIA GENERAL          2
+## 2 TEMPLADO                 38
+## 3 TEMPLADO                 37
+## 4 TEMPLADO                 36
+## 5 LAMINADO                 36
+## 6 TEMPLADO                 36
+```
+
+---
+
+## summarise()
+
+`summarise()` se usa para crear nuevas columnas con medidas de resumen estadístico. Se suele usar mucho en conjunto con group_by().
+
+Por ejemplo si quiero calcular la antigüedad promedio por área:
+
+
+```r
+nomina %&gt;%
+  select(AREA, ANTIGUEDAD) %&gt;%
+  group_by(AREA) %&gt;%
+* summarise(Ant_Promedio = mean(ANTIGUEDAD)) %&gt;%
+  head()
+```
+
+```
+## # A tibble: 6 x 2
+##   AREA          Ant_Promedio
+##   &lt;chr&gt;                &lt;dbl&gt;
+## 1 ALMACEN              10.2 
+## 2 CALIDAD               6.54
+## 3 COMERCIAL AGR         3.09
+## 4 COMERCIAL OE          4   
+## 5 COMPRAS              22   
+## 6 DESARROLLO           10.5
+```
+
+---
+
+## mutate()
+
+`mutate()` se usa para crear una nueva columna, a partir de las columnas que ya existen.
+
+Hagamos un cálculo loco, creemos una columna nueva que calcule la diferencia entre la edad y la edad promedio de la empresa
+
+
+```r
+nomina %&gt;%
+  select(ID, EDAD) %&gt;%
+* mutate(Diferencia_Edad = EDAD - mean(EDAD)) %&gt;%
+  head()
+```
+
+```
+##     ID EDAD Diferencia_Edad
+## 1 1757   51        13.65134
+## 2  180   63        25.65134
+## 3  242   64        26.65134
+## 4  260   61        23.65134
+## 5  277   64        26.65134
+## 6  278   59        21.65134
+```
+
+---
+
+## rename()
+
+Muchas veces los nombres de las tablas vienen con nombres poco comprensibles si no estás familiarizado, `rename()` te permite cambiar el nombre de una variable.
+
+Su sintaxis es:
+
+--
+
+1. Nombre nuevo de la variable
+
+--
+
+2. Nombre original de la variable
+
+
+```r
+nomina &lt;- nomina %&gt;%
+* rename(CATEGORIA = N_CATEG)
+
+names(nomina)
+```
+
+```
+## [1] "ID"           "ANTIGUEDAD"   "EDAD"         "ESTADO_CIVIL" "HIJOS"       
+## [6] "AREA"         "ID_CAT"       "CATEGORIA"
+```
+
+---
+class: inverse, middle
+
+# Secuencia de análisis
+
+## 1. Agrupar los grupos que quiero comparar (group_by)
+## 2. Calcular medidas de resumen estadístico (summarise, mutate)
+## 3. Graficar los resultados (ggplot)
+
+---
+
+# Unir datos de diferentes tablas
+
+.pull-left[
+La función `join() nos permite unir distintas tablas que contengan alguna columna en común.
+]
+
+.pull-right[
+&lt;img src="Archivos/donas.png" /&gt;
+]
+
+---
+
+# Unir datos de diferentes tablas
+# left_join()
+
+La función `left_join()` une al dataframe de la izquierda, las coincidencias que obtengamos del dataframe de la derecha.
+
+--
+
+Primero, creemos un nuevo dataframe con los datos que están en la segunda pestaña del archivo Nomina.xlsx usando el parámetro `sheet`.
+
+
+```r
+puestos &lt;- read.xlsx("Nomina.xlsx", sheet = "Puestos")
+
+# Usemos una función de tidyverse para explorar el dataframe
+glimpse(puestos)
+```
+
+```
+## Rows: 135
+## Columns: 3
+## $ ID     &lt;dbl&gt; 597, 789, 791, 804, 816, 820, 851, 864, 867, 872, 892, 898, 918~
+## $ PUESTO &lt;chr&gt; "TEC. MANTENIMIENTO", "VOLANTE", "JEFE", "LIDER DE EQUIPO", "LI~
+## $ SUELDO &lt;dbl&gt; 25129, 24474, 44344, 34235, 26401, 26682, 23851, 25811, 25877, ~
+```
+
+
+---
+
+## left_join
+
+Ahora que tenemos dos dataframes, podemos unir la información que necesitamos.
+
+En de la función `left_join()` **dentro del pipe** primero tenemos que poner el nombre del dataframe que vamos a buscar los datos que necesitamos, y que coinciden con el primer dataset (`nomina`), y luego uso el parámetro `by` para indicar la variable que vamos a usar para unir los datos.
+
+Esta es una función análoga al *buscarv* de Excel. Para ampliar los conocimientos sobre los *joins* les recomiendo esta presentación de [Patricia Loto](https://patricialoto-relationaldatawithdplyr.netlify.app/#20).
+
+
+```r
+# Primero el nombre del dataframe, luego la variable de unión.
+nomina_full &lt;- nomina %&gt;% 
+* left_join(puestos, by = "ID")
+
+glimpse(nomina_full)
+```
+
+```
+## Rows: 522
+## Columns: 10
+## $ ID           &lt;dbl&gt; 1757, 180, 242, 260, 277, 278, 304, 314, 315, 345, 362, 3~
+## $ ANTIGUEDAD   &lt;dbl&gt; 2, 38, 37, 36, 36, 36, 35, 35, 35, 40, 33, 32, 32, 32, 32~
+## $ EDAD         &lt;dbl&gt; 51, 63, 64, 61, 64, 59, 57, 54, 56, 59, 59, 55, 62, 52, 5~
+## $ ESTADO_CIVIL &lt;fct&gt; C, C, C, C, S, C, K, C, K, C, S, S, S, C, C, C, C, C, C, ~
+## $ HIJOS        &lt;dbl&gt; 1, 1, 2, 2, 4, 0, 1, 4, 3, 2, 1, 5, 0, 4, 2, 3, 2, 2, 0, ~
+## $ AREA         &lt;chr&gt; "GERENCIA GENERAL", "TEMPLADO", "TEMPLADO", "TEMPLADO", "~
+## $ ID_CAT       &lt;chr&gt; "GM", "5", "5", "5", "5", "4", "4", "4", "4", "5", "4", "~
+## $ CATEGORIA    &lt;chr&gt; "GERENTE GENERAL", "OP. POLIV. AMPLIAM. ESPEC.", "OP. POL~
+## $ PUESTO       &lt;chr&gt; "GERENTE GENERAL", NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+## $ SUELDO       &lt;dbl&gt; 94128, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+```
+
+
+---
+# Nuestro primer análisis
+
+El dataset nuevo tiene los sueldos de algunos empleados, los mensualizados. Por eso tenemos en las nuevas variables `PUESTO` y `SUELDO` unos registros con datos nulos, y que figuran como `NA`.
+
+Así que para nuestro primer análisis podemos crear un objeto nuevo, que lo llamaremos `mensuales` filtrando los datos nulos.
+
+
+```r
+# Filtramos todas las filas con NA en el campo PUESTO
+mensuales &lt;- nomina_full %&gt;% 
+* filter(!is.na(PUESTO))
+
+glimpse(mensuales)
+```
+
+```
+## Rows: 135
+## Columns: 10
+## $ ID           &lt;dbl&gt; 1757, 597, 789, 791, 804, 816, 820, 851, 864, 867, 872, 8~
+## $ ANTIGUEDAD   &lt;dbl&gt; 2, 23, 12, 12, 11, 10, 10, 9, 9, 9, 9, 8, 8, 8, 7, 7, 7, ~
+## $ EDAD         &lt;dbl&gt; 51, 55, 48, 34, 33, 40, 37, 41, 33, 28, 43, 41, 30, 30, 4~
+## $ ESTADO_CIVIL &lt;fct&gt; C, C, C, C, C, C, K, C, C, S, K, C, C, C, C, K, C, K, S, ~
+## $ HIJOS        &lt;dbl&gt; 1, 5, 2, 0, 3, 3, 2, 1, 2, 0, 1, 1, 1, 2, 3, 2, 4, 2, 0, ~
+## $ AREA         &lt;chr&gt; "GERENCIA GENERAL", "LAMINADO", "CALIDAD", "TEMPLADO", "L~
+## $ ID_CAT       &lt;chr&gt; "GM", "G", "F", "F", "F", "F", "E", "F", "F", "G", "F", "~
+## $ CATEGORIA    &lt;chr&gt; "GERENTE GENERAL", "Cat : G", "Cat : F", "LIDER DE EQUIPO~
+## $ PUESTO       &lt;chr&gt; "GERENTE GENERAL", "TEC. MANTENIMIENTO", "VOLANTE", "JEFE~
+## $ SUELDO       &lt;dbl&gt; 94128, 25129, 24474, 44344, 34235, 26401, 26682, 23851, 2~
+```
+
+---
+# Nuestro primer análisis
+
+Ahora que tenemos un dataset más limpio podemos hacer nuestro primer análisis. Por ejemplo, calcular el sueldo promedio por puesto.
+
+
+```r
+sueldos_promedios &lt;- mensuales %&gt;% 
+  select(PUESTO, SUELDO) %&gt;% 
+* group_by(PUESTO) %&gt;%
+* summarise(sueldo_promedio = mean(SUELDO))
+
+sueldos_promedios
+```
+
+```
+## # A tibble: 10 x 2
+##    PUESTO             sueldo_promedio
+##  * &lt;chr&gt;                        &lt;dbl&gt;
+##  1 ANALISTA                    22971.
+##  2 ENCARGADO                   26738 
+##  3 GERENTE                     75098.
+##  4 GERENTE GENERAL             94128 
+##  5 INGENIERO                   31240.
+##  6 JEFE                        44547 
+##  7 LIDER DE EQUIPO             31434.
+##  8 TEC. DESARROLLO             26755.
+##  9 TEC. MANTENIMIENTO          28940.
+## 10 VOLANTE                     24422.
+```
+
+---
+
+# Nuestro primer análisis
+
+.pull-left[
+Y ahora podemos graficar los resultados usando el paquete `ggplot2` que ya está cargado dentro de `tidyverse`.
+
+La sintaxis es:
+
+1. La función ggplot
+2. El dataframe a graficar
+3. Las variables a graficar
+4. El tipo de gráfico
+
+
+```r
+ggplot(sueldos_promedios, aes(x = PUESTO, y = sueldo_promedio)) +
+  geom_col()
+```
+
+]
+
+.pull-right[
+
+![](Clase_1_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+
+]
+
+---
+# Nuestro primer análisis
+## Mejoremos el gráfico
+
+.pull-left[
+
+```r
+ggplot(sueldos_promedios, 
+       aes(x = reorder(PUESTO, sueldo_promedio), # Ordena el gráfico por sueldos_promedios 
+           y = sueldo_promedio)) + 
+  geom_col() +
+  coord_flip() + # Rota  el gráfico
+  labs(title = "Sueldos Promedios por Puesto", 
+       subtitle = "Año 2016",
+       x = "Puesto",
+       y = "Sueldo Promedio",
+       caption = "Datos: Curso Introducción a R para RRHH") +
+  theme_minimal()
+```
+
+]
+
+.pull-right[
+
+![](Clase_1_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+# Ejercicios
+
+.pull-left[
+1. Calcular el desvío estándar de los sueldos por área con las funciones `summarise()` y `sd()`.
+2. ¿Cuántos empleados no tienen hijos?
+3. Del archivo "HRDataset_v13.csv", ¿cuáles son las fuentes de reclutamiento (`RecruitmentSource`) de donde se hayan los empleados con mejor score de performance `PerfScoreID`?
+
+]
+
+.pull-right[
+&lt;img src="https://i.pinimg.com/originals/33/58/18/335818b563208954ab8fc8896d2d3a18.png" width="90%" /&gt;
+]
+
+
+
+---
+class: inverse, center, bottom
+
+Presentación realizada con el paquete [Xaringan](https://github.com/yihui/xaringan) desarrollado por Yihui Xie.
+
+Gracias a [Patricia Loto](https://twitter.com/patriloto) por compartir el [tutorial](https://twitter.com/patriloto/status/1260822644590608391?s=20)
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
