@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introducción a R para RRHH</title>
+    <meta charset="utf-8" />
+    <script src="Clase_2_Gráficos_files/header-attrs-2.7/header-attrs.js"></script>
+    <link href="Clase_2_Gráficos_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="Clase_2_Gráficos_files/remark-css-0.0.1/shinobi.css" rel="stylesheet" />
+    <link href="Clase_2_Gráficos_files/remark-css-0.0.1/tamu-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: inverse, top, center
+background-image: url(Archivos/portada.png)
+background-size: cover
+
+
+
+---
+
+# Clase 2 - Haciendo gráficos en R
+## ggplot2
+
+**ggplot2** es uno de los paquetes que está dentro de *tidyverse* y es el paquete más utilizado para hacer gráficos.
+
+.pull-left[
+&lt;img src="Archivos/dia12-2.png"  /&gt;
+]
+
+.pull-right[
+&lt;img src="Archivos/scatter-fin-1.png"  /&gt;
+]
+
+---
+class: inverse
+# Pero antes...
+
+--
+
+### ¿Cómo les fue con los ejercicios?
+
+.right[
+&lt;img src="https://pasionporelcine.net/wp-content/uploads/2013/01/Memento-portada.jpg" /&gt;
+]
+
+
+---
+
+# Como los resolví yo
+
+
+
+### 1. Calcular el desvío estándar de los sueldos por área con las funciones `summarise()` y `sd()`.
+
+
+```r
+mensuales %&gt;% 
+  select(AREA, SUELDO) %&gt;% 
+  group_by(AREA) %&gt;% 
+  summarise(Dispersion_Salarial = sd(SUELDO)) %&gt;% 
+  arrange(Dispersion_Salarial)
+```
+
+```
+## # A tibble: 17 x 2
+##    AREA             Dispersion_Salarial
+##    &lt;chr&gt;                          &lt;dbl&gt;
+##  1 TEMPLADO                       6577.
+##  2 INSERTOS                       6936.
+##  3 ENCAPSULADO                    7028.
+##  4 ALMACEN                        7059.
+##  5 LOGISTICA AGR                  7481.
+##  6 COMPRAS                        9368.
+##  7 LOGISTICA OE                  11203.
+##  8 FINANZAS                      14530.
+##  9 COMERCIAL AGR                 14647.
+## 10 MASS                          15001.
+## 11 LAMINADO                      15907.
+## 12 DESARROLLO                    16293.
+## 13 CALIDAD                       16727.
+## 14 FACILITIES                    18531.
+## 15 RRHH                          26264.
+## 16 GERENCIA GENERAL              53033.
+## 17 COMERCIAL OE                     NA
+```
+
+---
+
+### 2. ¿Cuántos empleados no tienen hijos?
+
+
+```r
+nomina %&gt;% 
+  filter(HIJOS == 0) %&gt;% 
+  tally() # Es una función para contar los resultados
+```
+
+```
+##     n
+## 1 145
+```
+
+--
+
+Con una función de `funModeling` también podíamos responderlo fácil, ¿se acuerdan cuál es?
+
+--
+
+
+```r
+library(funModeling)
+
+status(nomina)
+```
+
+```
+##                  variable q_zeros    p_zeros q_na p_na q_inf p_inf      type
+## ID                     ID       0 0.00000000    0    0     0     0   numeric
+## ANTIGUEDAD     ANTIGUEDAD      40 0.07662835    0    0     0     0   numeric
+## EDAD                 EDAD       0 0.00000000    0    0     0     0   numeric
+## ESTADO_CIVIL ESTADO_CIVIL       0 0.00000000    0    0     0     0 character
+## HIJOS               HIJOS     145 0.27777778    0    0     0     0   numeric
+## AREA                 AREA       0 0.00000000    0    0     0     0 character
+## ID_CAT             ID_CAT       0 0.00000000    0    0     0     0 character
+## N_CATEG           N_CATEG       0 0.00000000    0    0     0     0 character
+##              unique
+## ID              522
+## ANTIGUEDAD       35
+## EDAD             45
+## ESTADO_CIVIL      3
+## HIJOS             9
+## AREA             17
+## ID_CAT           19
+## N_CATEG          23
+```
+
+---
+
+### Del archivo "HRDataset_v13.csv", ¿cuáles son las fuentes de reclutamiento (`RecruitmentSource`) de donde se hayan los empleados con mejor score de performance `PerfScoreID`?
+
+Primero, cargo el archivo
+
+```r
+library(readr)
+
+hr_data &lt;- read_delim("HRDataset_v13.csv", delim = ";")
+
+dim(hr_data)
+```
+
+```
+## [1] 310  35
+```
+
+--
+
+Luego, hago un `group_by` y uso `summarise` y `arrange` para responder el ejercicio.
+
+
+```r
+hr_data %&gt;% 
+  select(RecruitmentSource, PerfScoreID) %&gt;% 
+  group_by(RecruitmentSource) %&gt;% 
+  summarise(performance_promedio = mean(PerfScoreID)) %&gt;% 
+  arrange(-performance_promedio)
+```
+
+```
+## # A tibble: 23 x 2
+##    RecruitmentSource                      performance_promedio
+##    &lt;chr&gt;                                                 &lt;dbl&gt;
+##  1 Information Session                                    3.25
+##  2 Employee Referral                                      3.16
+##  3 Other                                                  3.11
+##  4 Social Networks - Facebook Twitter etc                 3.09
+##  5 On-campus Recruiting                                   3.08
+##  6 MBTA ads                                               3.06
+##  7 Careerbuilder                                          3   
+##  8 Company Intranet - Partner                             3   
+##  9 Diversity Job Fair                                     3   
+## 10 Glassdoor                                              3   
+## # ... with 13 more rows
+```
+
+---
+
+# Guardar archivos
+
+El paquete `openxlsx` también permite grabar los dataframes en un archivo de Excel.
+
+
+```r
+write.xlsx(x = perf_by_source, file = "desempeño_por_fuente.xlsx")
+```
+
+---
+class: inverse, center, middle
+
+## ¿Qué problemas tuvieron con la práctica?
+
+&lt;img src="https://media.giphy.com/media/ghutdpgRkhkxq/giphy.gif" width="60%" /&gt;
+
+
+---
+
+# Haciendo gráficos con ggplot2
+
+El paquete *ggplot2* es uno de los paquetes de *tidyverse*, y que está basado en la teoría de **"grammar of graphics"** (la gramática de los gráficos), porque permite construir los gráficos por capas, controlando las características individuales de cada uno.
+
+--
+
+&lt;img src="Archivos/grammar_graphics_details.png" width="85%" /&gt;
+
+--
+
+Esto implica que podemos controlar desde la **estructura** del gráfico (títulos, ejes) hasta todo lo que pasa dentro de la **visualización**.
+
+---
+# La gramática de los gráficos
+## Las capas de ggplot2
+
+En **ggplot2** las capas que podemos controlar:
+
+--
+
+* **Datos**: Cuál es el conjunto de datos que vamos a visualizar.
+
+--
+
+* **Aesthetics**: Acá volcamos las variables que vamos a graficar y que vamos a *mapear* en los ejes.
+
+--
+* **Geometría**: Es la forma geométrica (*geom*) que va a tomar la representación de los datos en la visualización (líneas, barras, puntos, etc.).
+
+--
+
+Estos son los elementos básicos para hacer un gráfico.
+
+---
+
+# La gramática de los gráficos
+## Las capas de ggplot2
+
+Otros elementos que podemos controlar con **ggplot2** son:
+
+--
+
+* **Facets**: Los *facets* nos permiten separar un mismo gráfico por categorías (por ejemplo, pensando en datos de RRHH unidades de negocio, países, áreas, etc.).
+
+--
+
+* **Estadística**: Podemos incluir dentro de los gráficos algún elemento que represente un cálculo estadístico, como ser promedios o regresiones lineales por ejemplo.
+
+--
+
+* **Coordenadas**: Nos permiten controlar la orientación de los gráficos, por ejemplo para hacer más legibles los ejes.
+
+--
+
+* **Temas**: En *themes* podemos controlar todos los aspectos estéticos de un gráfico, tanto de la estructura como de la visualización.
+
+---
+# Haciendo gráficos en ggplot2
+
+La sintaxis básica para hacer cualquier gráfico en ggplot2 es la siguiente:
+
+
+```r
+*ggplot(data, aes(x,y)) +
+* geom_col()
+```
+
+--
+Para hacer un gráfico mínimamente necesitamos:
+
+* data: La fuente de datos.
+* aes: Las variables a graficar
+* geom: El tipo de gráfico que vamos a hacer.
+
+--
+
+Instalar y cargar este paquete es igual que con el resto de los paquetes
+
+```r
+install.packages("ggplot2")
+library(ggplot2)
+```
+
+&gt; Nota: Si ya tenemos instalado tidyverse, no es necesario volver a instalar ggplot2, porque es uno de los paquetes que está integrado dentro de tidyverse.
+
+---
+# Gráficos básicos en ggplot2
+## El dataset
+
+Antes de empezar, cargamos el dataset.
+
+```r
+library(tidyverse)
+library(openxlsx)
+
+nomina &lt;- read.xlsx("Nomina.xlsx")
+puestos &lt;- read.xlsx("Nomina.xlsx", sheet = "Puestos")
+
+# Unifico los datasets y filtro los casos nulos de la columna PUESTO
+mensuales &lt;- nomina %&gt;% 
+  left_join(puestos, by = "ID") %&gt;% 
+  filter(!is.na(PUESTO))
+```
+
+---
+
+# Gráficos básicos en ggplot2
+## El dataset
+
+Vamos a hacer un par de modificaciones al dataframe. Vamos a crear rangos de edad, y ordenarlos. También vamos a modificar el estado civil para hacerlo más legible.
+
+
+```r
+mensuales &lt;- mensuales %&gt;% 
+  mutate(Rangos_Edad = case_when(
+    EDAD %in% 18:30 ~ "Hasta 30",
+    EDAD %in% 31:40 ~ "Entre 31 y 40",
+    EDAD %in% 41:50 ~ "Entre 41 y 50",
+    EDAD %in% 51:70 ~ "Más de 50"),
+    Rangos_Edad = factor(Rangos_Edad, levels = c("Hasta 30", "Entre 31 y 40",
+                                                 "Entre 41 y 50", "Más de 50")))
+```
+
+---
+# Gráficos básicos en ggplot2
+## Histogramas
+
+Los histogramas son gráficos que nos permiten crear un gráfico de barras, en la que cada barra representa un rango de valores. Es muy útil para conocer la **distribución** de una variable numérica.
+
+---
+
+# Gráficos básicos en ggplot2
+## Histogramas
+
+.pull-left[
+
+```r
+ggplot(mensuales, aes(SUELDO)) +
+* geom_histogram()
+```
+
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+]
+
+---
+# Gráficos básicos en ggplot2
+## Histogramas
+
+Por default, ggplot2 intenta representar los datos en *"cajones"* (bins). Podemos modificar la cantidad de bins con el parámetro **bins** por ejemplo.
+
+Y si queremos controlar el rango de cada bin, podemos usar el parámetro **bindwidth**.
+
+&lt;img src="Clase_2_Gráficos_files/figure-html/unnamed-chunk-13-1.png" width="35%" /&gt;&lt;img src="Clase_2_Gráficos_files/figure-html/unnamed-chunk-13-2.png" width="35%" /&gt;
+
+---
+
+# Gráficos básicos en ggplot2
+## Gráficos de Densidad
+
+.pull-left[
+Los gráficos de densidad son una alternativa a los histogramas, pero nos ayudan a representar la distribución.
+
+
+```r
+ggplot(mensuales, aes(SUELDO)) +
+* geom_density(color="blue", fill="blue", alpha=0.3)
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+]
+
+
+---
+# Gráficos básicos en ggplot2
+## Boxplots
+
+Los boxplots son gráficos que contienen una gran cantidad de información estadística.
+
+&lt;img src="Archivos/boxplot.png" width=50% align="center" /&gt;
+
+En este gráfico podemos ver:
+
+* Los cuartiles 1 y 3 (Q1 y Q3) en los bordes de la caja.
+* La mediana que es la linea dentro de la caja.
+* Los outliers, representados en puntos, que son observaciones que superan una vez y media (1,5 veces) el rango intercuartil.
+
+---
+
+# Gráficos básicos en ggplot2
+## Boxplots
+
+.pull-left[
+
+```r
+ggplot(mensuales, aes(SUELDO)) +
+* geom_boxplot()
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+]
+
+---
+class: inverse
+
+# PAUSA!!!
+
+&lt;img src="https://media.giphy.com/media/LTYT5GTIiAMBa/giphy.gif" /&gt;
+
+---
+# Gráficos básicos en ggplot2
+## Barras
+
+Los gráficos de columna son uno de los tipos de gráficos más populares por su sencilla interpretación, y la rápida comparación entre resultados, gracias a que es muy fácil comparar el largo de las barras.
+
+En ggplot2 existen dos *geoms* para hacer gráficos de barras: *geom_col* y *geom_bar*. La diferencia entre uno y otro es que *geom_col* permite visualizar el valor de las observaciones, mientras que *geom_bar* cuenta la cantidad de filas en las que aparece cada observación.
+
+---
+
+# Gráficos básicos en ggplot2
+## Barras
+
+&lt;img src="Clase_2_Gráficos_files/figure-html/unnamed-chunk-16-1.png" width="50%" /&gt;&lt;img src="Clase_2_Gráficos_files/figure-html/unnamed-chunk-16-2.png" width="50%" /&gt;
+
+---
+
+# Gráficos básicos en ggplot2
+## Barras con geom_bar
+
+.pull-left[
+En esencia, con geom_bar, lo que podemos hacer es **contar** cantidad de veces que se repite un valor dentro de una columna. Hay algunas variantes, por ejemplo apilar los segmentos:
+
+```r
+ggplot(mensuales, aes(x = AREA, fill = Rangos_Edad))+
+* geom_bar() +
+  theme(axis.text.x = element_text(angle = 90))+
+  ggtitle("Empleados por rango de edad por área")
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Gráficos básicos en ggplot2
+## Barras con geom_bar
+
+Algo muy útil en los geom_bar es la posibilidad de hacer un gráfico calculando la proporción de cada categoría agregando *position = "fill"*-
+
+.pull-left[
+
+```r
+ggplot(mensuales, aes(x = AREA, fill = Rangos_Edad))+
+* geom_bar(position = "fill") +
+  theme(axis.text.x = element_text(angle = 90))+
+  ggtitle("Proporción de rangos de edad por área")
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+]
+
+---
+# Gráficos básicos en ggplot2
+## Barras con geom_bar
+
+.pull-left[
+También podemos posicionar una barra al lado de la otra con *position = "dodge"*
+
+
+```r
+mensuales %&gt;%
+  filter(AREA %in% c("LAMINADO", "TEMPLADO")) %&gt;%
+  ggplot(aes(x = AREA, fill = Rangos_Edad))+
+* geom_bar(position = "dodge")+
+  ggtitle("Rangos de edad en Laminado y Templado")
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+]
+
+---
+# Gráficos básicos en ggplot2
+## Barras con geom_col
+
+Con los gráficos de columna podemos graficar el valor de cada observación, independientemente de la cantidad de veces que se repita la fila en el dataset.
+
+Cuando usamos geom_col es necesario indicar la variable en **x**, y también en **y**.
+
+.pull-left[
+
+```r
+mensuales %&gt;%
+  group_by(PUESTO) %&gt;%
+  summarise(Sueldo_Promedio = mean(SUELDO)) %&gt;%
+* ggplot(aes(x = PUESTO, y = Sueldo_Promedio))+
+* geom_col()+
+  ggtitle("Sueldos promedios por puestos")+
+  theme(axis.text.x = element_text(angle = 90))
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+# Gráficos básicos en ggplot2
+## Barras con geom_col
+
+Para facilitar la lectura del gráfico de barras, y siempre y cuando la variable categórica no sea ordinal, es una buena práctica ordenar las barras de mayor a menor para facilitar la comprensión del gráfico. Esto lo podemos hacer con la función **reorder**.
+
+.pull-left[
+
+```r
+mensuales %&gt;%
+  group_by(PUESTO) %&gt;%
+  summarise(Sueldo_Promedio = mean(SUELDO)) %&gt;%
+* ggplot(aes(x = reorder(PUESTO, -Sueldo_Promedio), y = Sueldo_Promedio))+
+  geom_col()+
+  ggtitle("Sueldos promedios por puesto")+
+  theme(axis.text.x = element_text(angle = 90))
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+]
+
+---
+# Gráficos básicos en ggplot2
+## Líneas
+
+Los gráficos de línea por naturaleza se usan para reflejar la evolución de una variable en el tiempo.
+
+--
+
+Para hacer una representación de este gráfico, vamos a usar un ejemplo extraído de la fuente de datos de [Kaggle](https://www.kaggle.com/rhuebner/human-resources-data-set/data).-
+
+
+---
+
+# Gráficos básicos en ggplot2
+## Líneas
+
+Primero cargamos los datos, usando la función `read_delim()` del paquete `readr`. Aquí tenemos que pasar dos argumentos: 
+
+1. El nombre del archivo
+2. El delimitador de los campos.
+
+
+```r
+library(readr)
+
+hr_data &lt;- read_delim("rotacion.csv", delim = ";")
+
+head(hr_data)
+```
+
+```
+## # A tibble: 6 x 3
+##    Year Movimientos  Cantidades
+##   &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt;
+## 1  2010 Hires                 9
+## 2  2010 Terminations          2
+## 3  2011 Hires                84
+## 4  2011 Terminations         14
+## 5  2012 Hires                44
+## 6  2012 Terminations         17
+```
+
+
+---
+
+# Gráficos básicos en ggplot2
+## Líneas
+
+.pull-left[ Creemos un gráfico de líneas básico.
+
+```r
+ggplot(hr_data, aes(x = Year, y = Cantidades))+
+*   geom_line(size = 1)
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Gráficos básicos en ggplot2
+## Líneas
+
+.pull-left[ Creemos un gráfico de líneas básico, pero que haya una línea por contrataciones y desvinculaciones.
+
+```r
+*ggplot(hr_data, aes(x = Year, y = Cantidades, color = Movimientos))+
+* geom_line(size = 1)
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Gráficos básicos en ggplot2
+## Líneas
+
+.pull-left[ Podemos agregar algunas mejoras al gráfico
+
+
+```r
+ggplot(hr_data, aes(x = Year, y = Cantidades, color = Movimientos))+
+  geom_line(size = 1) +
+* geom_point(size = 2)+ # Añadimos una capa de puntos
+* theme_minimal() +
+  labs(title = "Ingresos y Egresos por Año",
+       x = "", y = "") # Elimina las etiquetas de los ejes
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+# Gráficos básicos en ggplot2
+## Gráficos de dispersión - Scatter plots
+
+Los gráficos, o diagramas de dispersión, son una gran forma de visualizar relaciones entre variables numéricas, concentraciones de datos, entre otras cosas.
+
+Este tipo de gráfico es una buena introducción a las regresiones lineales.
+
+---
+# Gráficos básicos en ggplot2
+## Gráficos de dispersión - Scatter plots
+
+Para este ejemplo vamos a usar una muestra de la [Encuesta KIWI de Sueldos de RRHH](https://rpubs.com/Data4HR/encuesta-kiwi-2020) que hicimos con el [Club de R para RRHH](https://r4hr.club/). Para ello, vamos a cargar los datos directamente desde un [repositorio](https://github.com/r4hr/r4hr_introduccion_dplyr/blob/main/Datos/encuesta_sueldos.csv).
+
+Luego de cargar los datos eliminamos algunos datos espurios que *ensucian* el análisis.
+
+
+```r
+encuesta_rh &lt;- read_delim("https://raw.githubusercontent.com/r4hr/r4hr_introduccion_dplyr/main/Datos/encuesta_sueldos.csv", 
+                          delim = ",")
+
+# Filtro
+encuesta_rh &lt;- encuesta_rh %&gt;% 
+  filter(anios_rh &lt;= 30,
+*        between(sueldo_bruto, 20000, 500000))
+```
+
+---
+
+# Gráficos básicos en ggplot2
+## Gráficos de dispersión - Scatter plots
+
+.pull-left[
+Los **scatter plots** sirven tanto para relacionar datos numéricos, como también para analizar relaciones entre variables categóricas y numéricos. Primero analicemos dos variables numéricas, el sueldo bruto, y los años de experiencia.
+
+
+```r
+options(scipen = 999) # Cambia la notación científica de los gráficos
+
+ggplot(encuesta_rh, aes(x = anios_rh, y = sueldo_bruto))+
+* geom_point()
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Gráficos básicos en ggplot2
+## Gráficos de dispersión - Scatter plots
+
+.pull-left[ También podemos analizar la distribución de los sueldos según si estudiaron en universidades públicas o privadas.
+
+
+```r
+*ggplot(encuesta_rh, aes(x = universidad, y = sueldo_bruto)) +
+  geom_point()
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Gráficos básicos en ggplot2
+## Gráficos de dispersión - Scatter plots
+
+Cuando hacemos gráficos de dispersión, dos parámetros muy útiles para analizar donde hay más concentración de datos, son los parámetros **jitter** y **alpha**.
+
+--
+
+**Jitter** le añade un poco de ruido a los datos para evitar la superposición de puntos, pero manteniendo la distribución de los datos. Hablando mal y pronto, lo que hace es mover un poquito los puntos dentro del gráfico para que sean más visibles.
+
+--
+
+Otro parámetro muy útil es **alpha** que le añade transparencia a los puntos, lo cual nos ayuda a ver donde hay más concentración de datos, en donde haya más oscuridad del color.
+
+--
+
+También se puede jugar con el parámetro **size** o **shape** para modificar el tamaño, o la forma de los puntos.
+
+
+---
+
+# Gráficos básicos en ggplot2
+## Gráficos de dispersión - Scatter plots
+
+.pull-left[
+En este gráfico ponemos todos estos parámetros en práctica.
+
+
+```r
+*library(ggthemes)
+library(scales)
+
+ggplot(encuesta_rh, aes(x = universidad, y = sueldo_bruto, color = genero)) +
+* geom_point(position = "jitter",
+*            alpha = 0.5,
+*            size = 2) +
+* scale_color_colorblind() + # Del paquete ggthemes
+  labs(title = "Sueldos brutos por tipo de universidad",
+       subtitle = "Argentina 2020",
+       caption = "Fuente: Encuesta KIWI de Sueldos de RH",
+       x = "", y = "", 
+       color = "Género")+
+* scale_y_continuous(labels = comma_format(big.mark = ".", decimal.mark = ","))
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+]
+
+---
+# Gráficos básicos en ggplot2
+## Gráficos de dispersión - Scatter plots
+
+.pull-left[
+Una alternativa al gráfico anterior personalizando los colores.
+  
+
+```r
+# Defino unos colores personalizados para el género
+colores_genero &lt;-  c("#8624F5", "#1FC3AA")
+
+ggplot(encuesta_rh, aes(x = universidad, y = sueldo_bruto, color = genero)) +
+  geom_point(position = "jitter", alpha = 0.5, size = 2) +
+* scale_color_manual(values = colores_genero) +
+  labs(title = "Sueldos brutos por tipo de universidad",
+       subtitle = "Argentina 2020",
+       caption = "Fuente: Encuesta KIWI de Sueldos de RH",
+       x = "", y = "", 
+       color = "Género")+
+  scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +       theme_minimal()
+```
+]
+
+.pull-right[
+![](Clase_2_Gráficos_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Ejercicios
+
+.pull-left[
+1. Calcular los sueldos promedios por puesto de la Encuesta KIWI, y graficarlos agregando unas [barras de error](https://www.it-swarm-es.tech/es/r/como-agrego-barras-de-error-se-mi-grafico-de-barras-en-ggplot2/833648119/).
+2. Graficar el ejercicio 3 de la clase 1
+3. Graficar el nivel de satisfacción `EmpSatisfaction` por área `Department` con un gráfico apilado al 100% (con el parámetro `position = "fill"`).
+4. Hacer un gráfico de líneas de los ingresos y de los egresos por año, usando los colores de la empresa donde trabajan.
+5. Hacer un histograma, un gráfico de densidad y un boxplot de la columna `sueldo_bruto` de la Encuesta KIWI ¿Qué diferencias encuentran? ¿Qué interpretaciones hacen? ¿Cuáles les resultaron más fáciles de leer?
+
+
+Hacer todas las consultas en el canal `#auxilio` de Slack.
+]
+
+.pull-right[
+&lt;img src="https://i.pinimg.com/564x/d9/06/14/d906141386efa7ad988180e3d2bdbf03.jpg" width="90%" /&gt;
+]
+
+
+
+---
+
+# Anexo: Leer archivos de Google Sheets en R
+## Gráficos de dispersión - Scatter plots
+### La encuesta de Sysarmy
+
+Originalmente en este curso usábamos la encuesta de sueldos de IT de Sysarmy es una comunidad que es *"el soporte de quienes dan soporte"*. Además de un podcast y de organizar actividades para la comunidad de IT, son conocidos por realizar dos veces por año, una encuesta abierta de sueldos del mercado de tecnología. En su [blog]("https://sysarmy.com/blog/posts/resultados-de-la-encuesta-de-sueldos-2020-1/") pueden ver el archivo original que utilizábamos.
+
+Dejamos esta sección porque puede ser útil para cargar archivos directamente desde Google Sheets, sin necesidad de descargarlos a la computadora para analizarlos en R.
+
+---
+
+## La encuesta
+
+Sysarmy difunde la encuesta en una hoja de cáculo de Google.
+
+&lt;img src="Archivos/EncuestaSysArmy.png" width=60% align="center" /&gt;
+
+
+```r
+library(gargle) # Mejora la conversión de archivos de Google al español
+library(googlesheets4) # Carga planillas de cálculo de Google
+gs4_deauth() # No hace falta registrarse en google para acceder al archivo
+options(scipen = 999) # Cambia la notación científica de los gráficos
+
+encuesta_sysarmy &lt;- sheets_read("1_db6zEAMvr-1GQjJb4hV-rSQfJ9w6GmezbqKJ2JJn7I", skip = 9)
+```
+
+---
+### La encuesta: preprocesamiento
+
+
+```r
+seleccion &lt;- c("Años de experiencia","Trabajo de","Salario mensual BRUTO (en tu moneda local)", "Me identifico" )
+
+sysarmy &lt;- encuesta_sysarmy %&gt;%
+  select(seleccion)
+
+
+sysarmy &lt;- sysarmy %&gt;%
+  rename(Sueldo = "Salario mensual BRUTO (en tu moneda local)",
+        Puesto = "Trabajo de",
+        Experiencia = "Años de experiencia",
+        Sexo = "Me identifico") %&gt;%
+  filter(between(Sueldo,20000,1000000)) %&gt;%
+  mutate(Experiencia = unlist(Experiencia), 
+         Experiencia = as.numeric(Experiencia),
+         Puesto = factor(Puesto),
+         Sexo = factor(Sexo))
+           
+summary(sysarmy)
+```
+
+```
+##   Experiencia                         Puesto         Sueldo           Sexo     
+##  Min.   : 0.000   Developer              :2192   Min.   : 20000   Hombre:4854  
+##  1st Qu.: 3.000   SysAdmin / DevOps / SRE: 571   1st Qu.: 50000   Mujer : 796  
+##  Median : 7.000   Technical Leader       : 341   Median : 75000   Otros :  23  
+##  Mean   : 8.603   QA / Tester            : 261   Mean   : 94194                
+##  3rd Qu.:12.000   Manager / Director     : 222   3rd Qu.:111120                
+##  Max.   :45.000   HelpDesk               : 198   Max.   :900007                
+##                   (Other)                :1888
+```
+
+
+---
+
+### La encuesta: preprocesamiento
+
+Por último, ahora que tenemos un dataframe limpio para trabajar, filtremos por los tres puestos que tienen más observaciones:
+
+
+```r
+analisis_puestos &lt;- sysarmy %&gt;%
+  filter(Puesto %in% c("Developer", "SysAdmin / DevOps / SRE", "Technical Leader"))
+```
+
+
+---
+# Referencias útiles
+
+Repo de Ariadna Angulo Brunet [https://github.com/AnguloB/datosdemiercoles](https://github.com/AnguloB/datosdemiercoles)
+
+Hadley Wickham - Elegant graphics for data analysis
+
+## Texto en los gráficos
+
+https://www.r-graph-gallery.com/275-add-text-labels-with-ggplot2.html
+
+https://ggplot2.tidyverse.org/reference/geom_text.html
+
+https://cmdlinetips.com/2020/03/ggplot2-2-3-0-is-here-two-new-features-you-must-know/
+
+https://statisticsglobe.com/change-formatting-of-numbers-of-ggplot2-plot-axis-in-r
+
+## Colores
+
+http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/
+
+---
+
+# Paquetes utilizados
+
+* [ggplot2](https://ggplot2.tidyverse.org): H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
+* [tidyverse](https://doi.org/10.21105/joss.01686): Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686
+* [funModeling](https://CRAN.R-project.org/package=funModeling): Pablo Casas (2020). funModeling: Exploratory Data Analysis and Data Preparation Tool-Box. R package version 1.9.4.
+* [lubridate](http://www.jstatsoft.org/v40/i03/): Garrett Grolemund, Hadley Wickham (2011). Dates and Times Made Easy with lubridate. Journal of Statistical Software, 40(3), 1-25.
+* [ggthemes](https://CRAN.R-project.org/package=ggthemes): Jeffrey B. Arnold (2019). ggthemes: Extra Themes, Scales and Geoms for 'ggplot2'. R package version 4.2.0.
+* [gargle](https://CRAN.R-project.org/package=gargle): Jennifer Bryan, Craig Citro and Hadley Wickham (2020). gargle: Utilities for Working with
+  Google APIs. R package version 0.5.0.
+* [googlesheets4](https://CRAN.R-project.org/package=googlesheets4): Jennifer Bryan (2020). googlesheets4: Access Google Sheets using the Sheets API V4. R package version 0.2.0.
+
+
+---
+class: inverse, center, bottom
+
+Presentación realizada con el paquete [Xaringan](https://github.com/yihui/xaringan) desarrollado por Yihui Xie.
+
+Gracias a [Patricia Loto](https://twitter.com/patriloto) por compartir el [tutorial](https://twitter.com/patriloto/status/1260822644590608391?s=20)
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

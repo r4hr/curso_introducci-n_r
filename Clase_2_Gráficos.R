@@ -20,16 +20,16 @@ getwd() # Cuál es el directorio de trabajo
 # Cargo los dataframes de Nómina
 
 
+hr_data2 <- read_delim("Datasets/HRDataset_v13.csv", delim = ";")
+
 nomina <- read.xlsx("Nomina.xlsx")
 puestos <- read.xlsx("Nomina.xlsx", sheet = "Puestos")
 
-hr_data2 <- read_delim("Datasets/HRDataset_v13.csv", delim = ";")
 
 # Uno las tablas y creo el dataframe de los mensuales
 mensuales <- nomina %>% 
   left_join(puestos, by = "ID") %>% 
   filter(!is.na(PUESTO))
-
 
 #### Ejercicios Clase 1 ####
 
@@ -110,6 +110,9 @@ write.xlsx(x = perf_by_source, file = "desempeño_por_fuente.xlsx")
 
 #### ggplot2 ####
 
+write.xlsx(mensuales, file = "mensuales.xlsx")
+
+
 ## install.packages("ggplot2")
 library(ggplot2)
 
@@ -126,7 +129,7 @@ mensuales <- mensuales %>%
 
 # Histogramas
 ggplot(mensuales, aes(SUELDO)) +
-  geom_histogram()
+  geom_histogram() 
 
 # Modificar la cantidad de bins
 ggplot(mensuales, aes(SUELDO))+
@@ -143,8 +146,13 @@ ggplot(mensuales, aes(SUELDO))+
 ggplot(mensuales, aes(SUELDO)) +
   geom_density(color="blue", fill="blue", alpha=0.3)
 
+
+summary(mensuales$SUELDO)
+summary(mensuales)
+
+
 # Boxplot
-ggplot(mensuales, aes(SUELDO)) +
+ggplot(mensuales, aes(x = PUESTO, y = SUELDO)) +
   geom_boxplot()
 
 
@@ -158,13 +166,16 @@ mensuales %>%
   geom_col()+ ggtitle("geom_col") +
   theme(axis.text.x = element_text(angle = 90)) # Rota el texto del eje x en 90°
 
+
+  
 # Barras con geom_bar
 ggplot(mensuales, aes(x = PUESTO))+
-  geom_bar()+ ggtitle("geom_bar")+
+  geom_bar()+
+  ggtitle("geom_bar")+
   theme(axis.text.x = element_text(angle = 90)) # Rota el texto del eje x en 90°
 
 
-ggplot(mensuales, aes(x = AREA, fill = factor(EDAD)))+
+ggplot(mensuales, aes(x = AREA, fill  factor(EDAD)))+
   geom_bar()+
   theme(axis.text.x = element_text(angle = 90)) +
   ggtitle("Empleados por rango de edad por área")
@@ -191,7 +202,7 @@ mensuales %>%
   geom_bar(position = "dodge")+
   ggtitle("Rangos de edad en Laminado y Templado")
 
-ggplot(mensuales, aes(x = AREA, fill = Rangos_Edad))+
+ggplot(mensuales, aes(x = AREA))+
   geom_bar(position = "dodge")+
   ggtitle("Rangos de edad")
 
@@ -216,47 +227,38 @@ ggplot(mens, aes(y = PUESTO, x = Sueldo_Promedio)) +
 mensuales %>%
   group_by(PUESTO) %>%
   summarise(Sueldo_Promedio = mean(SUELDO)) %>%
-  ggplot(aes(x = reorder(PUESTO, -Sueldo_Promedio), y = Sueldo_Promedio))+
+  ggplot(aes(x = reorder(PUESTO, -Sueldo_Promedio), 
+             y = Sueldo_Promedio))+
   geom_col()+
   ggtitle("Sueldos promedios por puesto")+
   theme(axis.text.x = element_text(angle = 90))
-
 
 library(lubridate) # Paquete para trabajar con fechas
 library(stringr)
 library(readr)
 
 # Cargo un nuevo dataframe
-hr_data <- read_delim("Datasets/HRDataset_v13.csv", delim = ";")
+hr_data <- read_delim("rotacion.csv", delim = ";")
 
 glimpse(hr_data)
 
-hr_terminate <- hr_data %>%
-  select(Sex, DateofTermination) %>%
-  filter(DateofTermination != "") %>%                # Filtramos las celdas vacías
-  mutate(DateofTermination = mdy(DateofTermination), # El campo tiene un formato mes, día, año
-         Year_Termination = year(DateofTermination), # Extraemos el año de la variable DateofTermination
-         Sex = str_trim(Sex, side = "both"),         # Elimina espacios vacíos
-         Sex = factor(Sex, levels = c("F", "M"), labels = c("Female", "Male")),
-         Count = 1) %>%         # Agregamos una columna con un valor = 1 para poder sumar los casos
-  group_by(Year_Termination, Sex) %>%
-  summarise(Terminations = sum(Count))
-
-glimpse(hr_terminate)
-
-hr_terminate
+hr_data
 
 
 # Gráfico de líneas
-ggplot(hr_terminate, aes(x = Year_Termination, y = Terminations))+
-    geom_line(size = 1)
+ggplot(hr_data, aes(x = Year, y = Cantidades))+
+    geom_line()
 
 # Gráfico de líneas configurado
-ggplot(hr_terminate, aes(x = Year_Termination, y = Terminations, color = Sex))+
+ggplot(hr_data, aes(x = Year, y = Cantidades, color = Movimientos))+
+  geom_line(size = 1)
+
+# Gráfico de líneas configurado
+ggplot(hr_data, aes(x = Year, y = Cantidades, color = Movimientos))+
   geom_line(size = 1) +
   geom_point(size = 2)+
   theme_minimal() +
-  labs(title = "Bajas por año y género",
+  labs(title = "Ingresos y Egresos por Año",
        x = "", y = "") # Elimina las etiquetas de los ejes
 
 install.packages("gargle")
@@ -349,6 +351,14 @@ glimpse(encuesta_rh)
 
 summary(encuesta_rh)
 
+ggplot(encuesta_rh, aes(x = anios_rh)) +
+  geom_histogram()
+
+summary(encuesta_rh$sueldo_bruto)
+
+
+
+
 # Como tenemos una persona que cargó que tiene 121 años de experiencia,
 # vamos a filtrar la cantidad de años a menos de 30 años.
 
@@ -370,12 +380,18 @@ ggplot(encuesta_rh, aes(x = sueldo_bruto)) +
 encuesta_rh <- encuesta_rh %>% 
   filter(between(sueldo_bruto, 20000, 500000))
 
+ggplot(encuesta_rh, aes(x = sueldo_bruto)) +
+  geom_histogram()
+
+ggplot(encuesta_rh, aes(x = sueldo_bruto)) +
+  geom_boxplot()
+
 
 # Gráfico de dispersión
 options(scipen = 999) # Elimina la notación científica de los gráficos
 
 ggplot(encuesta_rh, aes(x = anios_rh, y = sueldo_bruto)) +
-  geom_point()
+  geom_point(shape = 10)
 
   
 dispersion_2 <- encuesta_rh %>% 
