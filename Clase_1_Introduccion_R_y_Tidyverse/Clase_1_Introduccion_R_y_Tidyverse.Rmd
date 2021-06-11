@@ -309,7 +309,10 @@ quiz(
 ))
 ```
 
+
+
 # Tidyverse
+
 
 ![](images/tidyverse_packages.png){width="438"}
 
@@ -476,3 +479,117 @@ mensuales <- empleados %>%
 mensuales <- empleados %>%          # Crea un nuevo dataframe con los datos de empleados
   select(ID, AREA, PUESTO, SUELDO)  # Selecciona las variables de interés
 ```
+
+### filter()
+
+La función `filter()` nos permite utilizar las filas que cumplan con las condiciones que necesitamos analizar. Podemos filtrar en base a columnas numéricas (por ejemplo, sueldos menores a cierto valor), o también por variables categóricas, en cuyo caso siempre vamos a necesitar poner la condición entre comillas (por ejemplo `filter(AREA == "RRHH")`.
+
+En conjunto con esta función vamos a necesitar algunos de los siguientes **operadores lógicos**:
+
+```{r operadores}
+library(gt)
+
+gt(
+  data.frame(
+    "symbol" = c("<", "<=", ">", ">=", "==", "!=", "&", "|"),
+    "meaning" = c("menor que", "menor o igual", "mayor que", "mayor o igual",
+                "igual a", "distinto que", "y", "o"))
+) %>% 
+  cols_label(
+    symbol = "Símbolo",
+    meaning = "Significado"
+  ) %>% 
+  cols_align(
+    align = "center",
+    columns = everything()
+  )
+```
+
+
+**Ejercicio**
+
+Filtrar por **Analistas** y calcular el sueldo promedio.
+
+```{r filter1, exercise = TRUE, exercise.lines = 7}
+mensuales %>% 
+  filter(PUESTO __ _________) %>% 
+  group_by(PUESTO) %>%                      # Agrupa por PUESTo
+  summarise(sueldo_promedio = mean(SUELDO)) # Calcula el sueldo promedio
+```
+
+```{r filter1-hint1}
+# Recuerda cuál es el operador lógico que representa al 'igual a'
+# Si filtras por una variable categórica hay que poner el valor entre comillas
+```
+
+```{r filter1-hint2}
+# El operador lógico cuando buscas un valor 'igual a' es el doble signo igual "=="
+# Dentro de la función filter usa PUESTO == "ANALISTA"
+```
+
+```{r filter1-solution}
+mensuales %>% 
+  filter(PUESTO == "ANALISTA") %>% 
+  group_by(PUESTO) %>% 
+  summarise(sueldo_promedio = mean(SUELDO))
+```
+
+
+Si necesito filtrar por dos variables puedo usar el operador lógico `&`.
+
+```{r filter2, exercise = TRUE, exercise.lines=7}
+# Filtra por el área PRODUCCION y puesto INGENIERO
+mensuales %>% 
+  filter(AREA == "PRODUCCION" ____ ___ "INGENIERO") %>% 
+  group_by(PUESTO) %>% 
+  summarise(sueldo_promedio = mean(SUELDO))
+```
+
+```{r filter2-hint}
+# Recuerda usar el operador lógico "&" o una coma ","
+# Para filtrar por una condición 'igual a'  hay que usar dos signos igual ==
+```
+
+```{r filter2-solution}
+# Filtra por el área PRODUCCION y puesto INGENIERO
+mensuales %>% 
+  filter(AREA == "PRODUCCION" & PUESTO == "INGENIERO") %>% 
+  group_by(PUESTO) %>% 
+  summarise(sueldo_promedio = mean(SUELDO))
+
+```
+
+
+¿Qué operador lógico necesitamos para filtrar por ejemplo los empleados de `RRHH` y los de `FINANZAS`?
+
+```{r filter3, exercise = TRUE, exercise.lines=7}
+# Corrige el script con el operador lógico correcto
+mensuales %>% 
+  filter(AREA == "RRHH" & AREA == "FINANZAS") %>% 
+  group_by(PUESTO) %>% 
+  summarise(sueldo_promedio = mean(SUELDO))
+```
+
+```{r filter3-hint}
+# Para la computadora ningún empleado puede pertener al área de RRHH Y de FINANZAS al mismo tiempo
+# Debemos indicar los empleados que pertenecen a RRHH o a FINAZAS.
+# El operador lógico de OR (o) es | 
+```
+
+```{r filter3-solution}
+mensuales %>% 
+  filter(AREA == "RRHH" | AREA == "FINANZAS") %>% 
+  group_by(PUESTO) %>% 
+  summarise(sueldo_promedio = mean(SUELDO))
+```
+
+
+En los casos que sea necesario filtrar por varias condiciones de la misma variable lo ideal es usar un *vector de selección*. Prueba de correr el siguiente código.
+
+```{r filter4, exercise = TRUE, exercise.lines=7}
+mensuales %>% 
+  filter(AREA %in% c("PRODUCCION", "CALIDAD", "DESARROLLO")) %>% 
+  group_by(PUESTO) %>% 
+  summarise(sueldo_promedio = mean(SUELDO))
+```
+
