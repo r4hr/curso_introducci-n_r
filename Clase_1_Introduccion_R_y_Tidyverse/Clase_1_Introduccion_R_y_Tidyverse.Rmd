@@ -219,6 +219,8 @@ soda.stereo <- data.frame(
   nacimiento = c(1959, 1963, 1958)
 )
 
+readr::write_delim(soda.stereo, file = "soda.stereo.csv", delim = ";")
+
 ```
 
 ```{r df-soda2, exercise = TRUE, exercise.lines = 10}
@@ -376,7 +378,7 @@ library(tidyverse)
 plantel <- read.xlsx("Nomina.xlsx")
 salarios <- read.xlsx("Puestos.xlsx")
 
-mensualizados <- plantel %>% 
+empleados <- plantel %>% 
   left_join(salarios, by ="ID") %>% 
   filter(!is.na(PUESTO))
 
@@ -438,10 +440,12 @@ Ahora vamos a unir ambos dataframes en uno solo para poder hacer nuestros análi
 
 Usaremos la función `left_join()` para agregar al dataframe `plantel` los datos del dataframe `salarios.`
 
-```{r leftjoin, exercise = TRUE}
+```{r leftjoin, exercise = TRUE, exercise.lines = 6}
 # Agrega al dataframe 'plantel' el dataframe 'salarios'
 empleados <- left____(_____, _____, by = "ID")
 
+# Ver la cantidad de observaciones y de variables
+dim(empleados)
 ```
 
 ```{r leftjoin-hint}
@@ -452,7 +456,15 @@ empleados <- left____(_____, _____, by = "ID")
 
 ```{r leftjoin-solution}
 empleados <- left_join(plantel, salarios, by = "ID")
+
+# Ver la cantidad de observaciones y de variables
+dim(empleados)
 ```
+
+```{r carga-empleados, echo=FALSE}
+readr::write_delim(empleados, delim = ";", file = "empleados.csv")
+```
+
 
 ### select()
 
@@ -465,9 +477,12 @@ str(empleados)
 
 Las variables `ANTIGUEDAD`, `EDAD`, `ESTADO_CIVIL` e `HIJOS` no tienen mucho sentido para un análisis salarial. En el próximo ejercicio, selecciona las columnas `ID`, `AREA`, `PUESTO`, `SUELDO` y guarda la selección en un objeto llamado `mensuales.`
 
-```{r select, exercise = TRUE, exercise.lines = 5}
+```{r select, exercise = TRUE, exercise.lines = 8}
 mensuales <- empleados %>% 
   _______(___, ___, ____, ____)
+
+# Ver la estructura del dataframe
+str(mensuales)
 ```
 
 ```{r select-hint}
@@ -478,6 +493,16 @@ mensuales <- empleados %>%
 ```{r select-solution}
 mensuales <- empleados %>%          # Crea un nuevo dataframe con los datos de empleados
   select(ID, AREA, PUESTO, SUELDO)  # Selecciona las variables de interés
+
+# Ver la estructura del dataframe
+str(mensuales)
+```
+
+```{r mensuales}
+mensuales <- empleados %>%          # Crea un nuevo dataframe con los datos de empleados
+  select(ID, AREA, PUESTO, SUELDO)
+
+readr::write_delim(mensuales, file = "mensuales.csv", delim = ";")
 ```
 
 ### filter()
@@ -508,12 +533,12 @@ gt(
 
 **Ejercicio**
 
-Filtrar por **Analistas** y calcular el sueldo promedio.
+Filtra por **ANALISTA** y calcula el sueldo promedio.
 
 ```{r filter1, exercise = TRUE, exercise.lines = 7}
 mensuales %>% 
   filter(PUESTO __ _________) %>% 
-  group_by(PUESTO) %>%                      # Agrupa por PUESTo
+  group_by(PUESTO) %>%                      # Agrupa por PUESTO
   summarise(sueldo_promedio = mean(SUELDO)) # Calcula el sueldo promedio
 ```
 

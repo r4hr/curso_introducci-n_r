@@ -438,9 +438,12 @@ nomina %&gt;%
 </div>
 <p>Ahora vamos a unir ambos dataframes en uno solo para poder hacer nuestros análisis.</p>
 <p>Usaremos la función <code>left_join()</code> para agregar al dataframe <code>plantel</code> los datos del dataframe <code>salarios.</code></p>
-<div class="tutorial-exercise" data-label="leftjoin" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
+<div class="tutorial-exercise" data-label="leftjoin" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="6">
 <pre class="text"><code># Agrega al dataframe &#39;plantel&#39; el dataframe &#39;salarios&#39;
-empleados &lt;- left____(_____, _____, by = &quot;ID&quot;)</code></pre>
+empleados &lt;- left____(_____, _____, by = &quot;ID&quot;)
+
+# Ver la cantidad de observaciones y de variables
+dim(empleados)</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="leftjoin-hint" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -449,7 +452,10 @@ empleados &lt;- left____(_____, _____, by = &quot;ID&quot;)</code></pre>
 # Cuidado con mayúsculas y minúsculas</code></pre>
 </div>
 <div class="tutorial-exercise-support" data-label="leftjoin-solution" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>empleados &lt;- left_join(plantel, salarios, by = &quot;ID&quot;)</code></pre>
+<pre class="text"><code>empleados &lt;- left_join(plantel, salarios, by = &quot;ID&quot;)
+
+# Ver la cantidad de observaciones y de variables
+dim(empleados)</code></pre>
 </div>
 </div>
 <div id="section-select" class="section level3">
@@ -461,9 +467,12 @@ str(empleados)</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p>Las variables <code>ANTIGUEDAD</code>, <code>EDAD</code>, <code>ESTADO_CIVIL</code> e <code>HIJOS</code> no tienen mucho sentido para un análisis salarial. En el próximo ejercicio, selecciona las columnas <code>ID</code>, <code>AREA</code>, <code>PUESTO</code>, <code>SUELDO</code> y guarda la selección en un objeto llamado <code>mensuales.</code></p>
-<div class="tutorial-exercise" data-label="select" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="5">
+<div class="tutorial-exercise" data-label="select" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="8">
 <pre class="text"><code>mensuales &lt;- empleados %&gt;% 
-  _______(___, ___, ____, ____)</code></pre>
+  _______(___, ___, ____, ____)
+
+# Ver la estructura del dataframe
+str(mensuales)</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="select-hint" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -472,7 +481,10 @@ str(empleados)</code></pre>
 </div>
 <div class="tutorial-exercise-support" data-label="select-solution" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>mensuales &lt;- empleados %&gt;%          # Crea un nuevo dataframe con los datos de empleados
-  select(ID, AREA, PUESTO, SUELDO)  # Selecciona las variables de interés</code></pre>
+  select(ID, AREA, PUESTO, SUELDO)  # Selecciona las variables de interés
+
+# Ver la estructura del dataframe
+str(mensuales)</code></pre>
 </div>
 </div>
 <div id="section-filter" class="section level3">
@@ -483,7 +495,7 @@ str(empleados)</code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#cxmzdjhjzc .gt_table {
+#ttdyzvztem .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -508,7 +520,7 @@ str(empleados)</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#cxmzdjhjzc .gt_heading {
+#ttdyzvztem .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -520,7 +532,7 @@ str(empleados)</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#cxmzdjhjzc .gt_title {
+#ttdyzvztem .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -530,7 +542,7 @@ str(empleados)</code></pre>
   border-bottom-width: 0;
 }
 
-#cxmzdjhjzc .gt_subtitle {
+#ttdyzvztem .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -540,13 +552,13 @@ str(empleados)</code></pre>
   border-top-width: 0;
 }
 
-#cxmzdjhjzc .gt_bottom_border {
+#ttdyzvztem .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cxmzdjhjzc .gt_col_headings {
+#ttdyzvztem .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -561,7 +573,7 @@ str(empleados)</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#cxmzdjhjzc .gt_col_heading {
+#ttdyzvztem .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -581,7 +593,7 @@ str(empleados)</code></pre>
   overflow-x: hidden;
 }
 
-#cxmzdjhjzc .gt_column_spanner_outer {
+#ttdyzvztem .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -593,15 +605,15 @@ str(empleados)</code></pre>
   padding-right: 4px;
 }
 
-#cxmzdjhjzc .gt_column_spanner_outer:first-child {
+#ttdyzvztem .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cxmzdjhjzc .gt_column_spanner_outer:last-child {
+#ttdyzvztem .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cxmzdjhjzc .gt_column_spanner {
+#ttdyzvztem .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -613,7 +625,7 @@ str(empleados)</code></pre>
   width: 100%;
 }
 
-#cxmzdjhjzc .gt_group_heading {
+#ttdyzvztem .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -635,7 +647,7 @@ str(empleados)</code></pre>
   vertical-align: middle;
 }
 
-#cxmzdjhjzc .gt_empty_group_heading {
+#ttdyzvztem .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -650,15 +662,15 @@ str(empleados)</code></pre>
   vertical-align: middle;
 }
 
-#cxmzdjhjzc .gt_from_md > :first-child {
+#ttdyzvztem .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cxmzdjhjzc .gt_from_md > :last-child {
+#ttdyzvztem .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cxmzdjhjzc .gt_row {
+#ttdyzvztem .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -677,7 +689,7 @@ str(empleados)</code></pre>
   overflow-x: hidden;
 }
 
-#cxmzdjhjzc .gt_stub {
+#ttdyzvztem .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -689,7 +701,7 @@ str(empleados)</code></pre>
   padding-left: 12px;
 }
 
-#cxmzdjhjzc .gt_summary_row {
+#ttdyzvztem .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -699,7 +711,7 @@ str(empleados)</code></pre>
   padding-right: 5px;
 }
 
-#cxmzdjhjzc .gt_first_summary_row {
+#ttdyzvztem .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -709,7 +721,7 @@ str(empleados)</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#cxmzdjhjzc .gt_grand_summary_row {
+#ttdyzvztem .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -719,7 +731,7 @@ str(empleados)</code></pre>
   padding-right: 5px;
 }
 
-#cxmzdjhjzc .gt_first_grand_summary_row {
+#ttdyzvztem .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -729,11 +741,11 @@ str(empleados)</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#cxmzdjhjzc .gt_striped {
+#ttdyzvztem .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#cxmzdjhjzc .gt_table_body {
+#ttdyzvztem .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -742,7 +754,7 @@ str(empleados)</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#cxmzdjhjzc .gt_footnotes {
+#ttdyzvztem .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -756,13 +768,13 @@ str(empleados)</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#cxmzdjhjzc .gt_footnote {
+#ttdyzvztem .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#cxmzdjhjzc .gt_sourcenotes {
+#ttdyzvztem .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -776,46 +788,46 @@ str(empleados)</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#cxmzdjhjzc .gt_sourcenote {
+#ttdyzvztem .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#cxmzdjhjzc .gt_left {
+#ttdyzvztem .gt_left {
   text-align: left;
 }
 
-#cxmzdjhjzc .gt_center {
+#ttdyzvztem .gt_center {
   text-align: center;
 }
 
-#cxmzdjhjzc .gt_right {
+#ttdyzvztem .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cxmzdjhjzc .gt_font_normal {
+#ttdyzvztem .gt_font_normal {
   font-weight: normal;
 }
 
-#cxmzdjhjzc .gt_font_bold {
+#ttdyzvztem .gt_font_bold {
   font-weight: bold;
 }
 
-#cxmzdjhjzc .gt_font_italic {
+#ttdyzvztem .gt_font_italic {
   font-style: italic;
 }
 
-#cxmzdjhjzc .gt_super {
+#ttdyzvztem .gt_super {
   font-size: 65%;
 }
 
-#cxmzdjhjzc .gt_footnote_marks {
+#ttdyzvztem .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="cxmzdjhjzc" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+<div id="ttdyzvztem" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
   
   <thead class="gt_col_headings">
     <tr>
@@ -861,11 +873,11 @@ str(empleados)</code></pre>
   
 </table></div>
 <p><strong>Ejercicio</strong></p>
-<p>Filtrar por <strong>Analistas</strong> y calcular el sueldo promedio.</p>
+<p>Filtra por <strong>ANALISTA</strong> y calcula el sueldo promedio.</p>
 <div class="tutorial-exercise" data-label="filter1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="7">
 <pre class="text"><code>mensuales %&gt;% 
   filter(PUESTO __ _________) %&gt;% 
-  group_by(PUESTO) %&gt;%                      # Agrupa por PUESTo
+  group_by(PUESTO) %&gt;%                      # Agrupa por PUESTO
   summarise(sueldo_promedio = mean(SUELDO)) # Calcula el sueldo promedio</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
@@ -982,19 +994,19 @@ output$`tutorial-exercise-activar-paquete-output` <- renderUI({
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "paquetes-1", question = structure("¿Cuántas veces hay que instalar un paquete?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_17be3ed",     option = "Una sola vez", value = "Una sola vez", label = structure("Una sola vez", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_344fea7",     option = "Cada vez que corremos un script", value = "Cada vez que corremos un script",     label = structure("Cada vez que corremos un script", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("La instalación sólo es necesaria una sola vez", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_8c0029d", option = "Cada vez que creamos un proyecto nuevo",     value = "Cada vez que creamos un proyecto nuevo", label = structure("Cada vez que creamos un proyecto nuevo", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("No importa la cantidad de proyectos. Cada vez que instalamos un paquete queda disponible para todos los proyectos que creemos.", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9e6bc13", option = "Depende",     value = "Depende", label = structure("Depende", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("<a href=\"https://youtu.be/dgf5QlcyTFY\">Depende<\u002fa> es una bonita canción de Jarabe de Palo y en este caso es una respuesta incorrecta ;p", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", "character")), try_again = structure("Intenta de nuevo", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "paquetes-1-answer", question = "paquetes-1"), loading = structure("<strong>Loading:<\u002fstrong> \n¿Cuántas veces hay que instalar un paquete?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = FALSE, allow_retry = TRUE,     seed = 1820220712.65239, options = list()), class = c("learnr_radio", "tutorial_question")))
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "paquetes-1", question = structure("¿Cuántas veces hay que instalar un paquete?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_467f88a",     option = "Una sola vez", value = "Una sola vez", label = structure("Una sola vez", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_28660c",     option = "Cada vez que corremos un script", value = "Cada vez que corremos un script",     label = structure("Cada vez que corremos un script", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("La instalación sólo es necesaria una sola vez", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_599cb8b", option = "Cada vez que creamos un proyecto nuevo",     value = "Cada vez que creamos un proyecto nuevo", label = structure("Cada vez que creamos un proyecto nuevo", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("No importa la cantidad de proyectos. Cada vez que instalamos un paquete queda disponible para todos los proyectos que creemos.", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_6e0d8c8", option = "Depende",     value = "Depende", label = structure("Depende", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("<a href=\"https://youtu.be/dgf5QlcyTFY\">Depende<\u002fa> es una bonita canción de Jarabe de Palo y en este caso es una respuesta incorrecta ;p", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", "character")), try_again = structure("Intenta de nuevo", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "paquetes-1-answer", question = "paquetes-1"), loading = structure("<strong>Loading:<\u002fstrong> \n¿Cuántas veces hay que instalar un paquete?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = FALSE, allow_retry = TRUE,     seed = 1783393909.16954, options = list()), class = c("learnr_radio", "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "paquetes-2", question = structure("Cada vez que abro un script es necesario correr la función <code>library<\u002fcode>", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_6ed2043",     option = "Verdadero", value = "Verdadero", label = structure("Verdadero", html = TRUE, class = c("html",     "character")), correct = TRUE, message = structure("Si, es correcto, cada vez que abrimos R tenemos que correr el script desde el principio y vover a activar los paquetes.", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_cc27a5e", option = "Falso",     value = "Falso", label = structure("Falso", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("Cada vez que abrimos el script hay que correr todo el código desde el principio y activar el paquete con la función library", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", "character")), try_again = structure("Intenta de nuevo", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "paquetes-2-answer", question = "paquetes-2"), loading = structure("<strong>Loading:<\u002fstrong> \nCada vez que abro un script es necesario correr la función <code>library<\u002fcode>\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = FALSE, allow_retry = TRUE,     seed = 376549832.324655, options = list()), class = c("learnr_radio", "tutorial_question")))
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "paquetes-2", question = structure("Cada vez que abro un script es necesario correr la función <code>library<\u002fcode>", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_6301258",     option = "Verdadero", value = "Verdadero", label = structure("Verdadero", html = TRUE, class = c("html",     "character")), correct = TRUE, message = structure("Si, es correcto, cada vez que abrimos R tenemos que correr el script desde el principio y vover a activar los paquetes.", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_8c29400", option = "Falso",     value = "Falso", label = structure("Falso", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("Cada vez que abrimos el script hay que correr todo el código desde el principio y activar el paquete con la función library", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", "character")), try_again = structure("Intenta de nuevo", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "paquetes-2-answer", question = "paquetes-2"), loading = structure("<strong>Loading:<\u002fstrong> \nCada vez que abro un script es necesario correr la función <code>library<\u002fcode>\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = FALSE, allow_retry = TRUE,     seed = 396955669.815153, options = list()), class = c("learnr_radio", "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "paquetes-3", question = structure("¿Por qué aparece este mensaje de error?: &#39;no se pudo encontrar la función _________&#39;", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_cc50476",     option = "Porque el paquete no está instalado", value = "Porque el paquete no está instalado",     label = structure("Porque el paquete no está instalado", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("Es posible, pero hay otra respuesta más específica", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_75cf44a", option = "Porque no corrió la función library()",     value = "Porque no corrió la función library()", label = structure("Porque no corrió la función library()", html = TRUE, class = c("html",     "character")), correct = TRUE, message = structure("Perfecto! La función library() activa las funciones", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_55d1d24", option = "Porque está mal escrito el nombre del paquete",     value = "Porque está mal escrito el nombre del paquete",     label = structure("Porque está mal escrito el nombre del paquete", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("Si hay un error de tipeo el mensaje diría: there is no package called ___", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", "character")), try_again = structure("Intenta de nuevo", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "paquetes-3-answer", question = "paquetes-3"), loading = structure("<strong>Loading:<\u002fstrong> \n¿Por qué aparece este mensaje de error?: &#39;no se pudo encontrar la función _________&#39;\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = FALSE, allow_retry = TRUE,     seed = 1873766548.62746, options = list()), class = c("learnr_radio", "tutorial_question")))
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "paquetes-3", question = structure("¿Por qué aparece este mensaje de error?: &#39;no se pudo encontrar la función _________&#39;", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_5c4dd7f",     option = "Porque el paquete no está instalado", value = "Porque el paquete no está instalado",     label = structure("Porque el paquete no está instalado", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("Es posible, pero hay otra respuesta más específica", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_10a5f95", option = "Porque no corrió la función library()",     value = "Porque no corrió la función library()", label = structure("Porque no corrió la función library()", html = TRUE, class = c("html",     "character")), correct = TRUE, message = structure("Perfecto! La función library() activa las funciones", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_50c27da", option = "Porque está mal escrito el nombre del paquete",     value = "Porque está mal escrito el nombre del paquete",     label = structure("Porque está mal escrito el nombre del paquete", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("Si hay un error de tipeo el mensaje diría: there is no package called ___", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", "character")), try_again = structure("Intenta de nuevo", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "paquetes-3-answer", question = "paquetes-3"), loading = structure("<strong>Loading:<\u002fstrong> \n¿Por qué aparece este mensaje de error?: &#39;no se pudo encontrar la función _________&#39;\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = FALSE, allow_retry = TRUE,     seed = 1661502749.7263, options = list()), class = c("learnr_radio", "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "left-q-1", question = structure("¿Cuántas filas y columnas tiene el dataframe &#39;salarios&#39;?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_d264ec9",     option = "135 columnas y 3 variables", value = "135 columnas y 3 variables",     label = structure("135 columnas y 3 variables", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("Las observaciones son las filas y las variables son las columnas", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_769d3a8", option = "130 filas y 10 variables",     value = "130 filas y 10 variables", label = structure("130 filas y 10 variables", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("Mirá de nuevo el resultado de la estructura del dataframe salarios. Primero indica las observaciones, y luego las variables", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_abb8ed9", option = "135 filas y 3 columnas",     value = "135 filas y 3 columnas", label = structure("135 filas y 3 columnas", html = TRUE, class = c("html",     "character")), correct = TRUE, message = structure("Muy bien!", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", "character")), try_again = structure("Intenta de nuevo", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "left-q-1-answer", question = "left-q-1"), loading = structure("<strong>Loading:<\u002fstrong> \n¿Cuántas filas y columnas tiene el dataframe &#39;salarios&#39;?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = FALSE, allow_retry = TRUE,     seed = 213172754.400734, options = list()), class = c("learnr_radio", "tutorial_question")))
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "left-q-1", question = structure("¿Cuántas filas y columnas tiene el dataframe &#39;salarios&#39;?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_38cb445",     option = "135 columnas y 3 variables", value = "135 columnas y 3 variables",     label = structure("135 columnas y 3 variables", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("Las observaciones son las filas y las variables son las columnas", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9baaea7", option = "130 filas y 10 variables",     value = "130 filas y 10 variables", label = structure("130 filas y 10 variables", html = TRUE, class = c("html",     "character")), correct = FALSE, message = structure("Mirá de nuevo el resultado de la estructura del dataframe salarios. Primero indica las observaciones, y luego las variables", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_b1e1017", option = "135 filas y 3 columnas",     value = "135 filas y 3 columnas", label = structure("135 filas y 3 columnas", html = TRUE, class = c("html",     "character")), correct = TRUE, message = structure("Muy bien!", html = TRUE, class = c("html",     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Enviar respuesta", html = TRUE, class = c("html", "character")), try_again = structure("Intenta de nuevo", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "left-q-1-answer", question = "left-q-1"), loading = structure("<strong>Loading:<\u002fstrong> \n¿Cuántas filas y columnas tiene el dataframe &#39;salarios&#39;?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = FALSE, allow_retry = TRUE,     seed = 351073829.336519, options = list()), class = c("learnr_radio", "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
